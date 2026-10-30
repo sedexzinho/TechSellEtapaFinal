@@ -12,11 +12,12 @@
   body {
     @apply bg-navy-dark text-text-primary font-sans;
     font-feature-settings: "ss01" on, "cv11" on;
-    background-image: radial-gradient(circle at 90% -10%, rgba(20, 184, 166, 0.08), transparent 34rem);
+    background-image: radial-gradient(circle at 88% -12%, rgba(79, 124, 255, 0.16), transparent 34rem), radial-gradient(circle at 8% 20%, rgba(34, 211, 238, 0.05), transparent 28rem);
   }
 
   ::selection {
-    background: rgba(15, 118, 110, 0.16);
+    background: rgba(79, 124, 255, 0.3);
+    color: #F8FAFC;
   }
 }
 
@@ -35,7 +36,7 @@
 
   .surface-card {
     @apply rounded-card border border-navy-border bg-navy-surface shadow-card;
-    background-image: linear-gradient(135deg, rgba(255, 255, 255, 0.99), rgba(248, 250, 252, 0.94));
+    background-image: linear-gradient(135deg, rgba(21, 31, 51, 0.98), rgba(17, 26, 45, 0.94));
     transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.28s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.28s ease;
   }
 
@@ -68,7 +69,7 @@
   }
 
   .field-label {
-    @apply mb-1.5 block text-sm font-medium text-slate-600;
+    @apply mb-1.5 block text-sm font-medium text-slate-300;
   }
 
   .field-control {
@@ -404,6 +405,35 @@ div.fixed.inset-0 > div[class*="bg-navy-surface"].flex {
 
   .spinner {
     animation: none;
+  }
+}
+
+@layer utilities {
+  .bg-white {
+    background-color: #111A2D !important;
+  }
+
+  .bg-slate-50 {
+    background-color: #0D1424 !important;
+  }
+
+  .bg-slate-100 {
+    background-color: #18243A !important;
+  }
+
+  .text-slate-700,
+  .text-slate-600 {
+    color: #CBD5E1 !important;
+  }
+
+  .text-slate-500,
+  .text-slate-400 {
+    color: #94A3B8 !important;
+  }
+
+  .border-slate-200,
+  .border-slate-300 {
+    border-color: #263451 !important;
   }
 }
 
