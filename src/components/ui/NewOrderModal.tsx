@@ -37,10 +37,13 @@ const NewOrderModal: React.FC<NewOrderModalProps> = ({
 
   // Handle product quantity change
   const handleQuantityChange = (productId: number, quantity: number) => {
-    setSelectedProducts(prev => 
-      prev.map(item => 
-        item.id === productId 
-          ? { ...item, quantity: Math.max(1, quantity) } 
+    const product = products.find((item) => item.id === productId);
+    const maxQuantity = product?.estoque ?? 1;
+
+    setSelectedProducts((prev) =>
+      prev.map((item) =>
+        item.id === productId
+          ? { ...item, quantity: Math.min(maxQuantity, Math.max(1, quantity)) }
           : item
       )
     );
@@ -55,14 +58,19 @@ const NewOrderModal: React.FC<NewOrderModalProps> = ({
   const handleAddProduct = (product: Product) => {
     const existingItem = selectedProducts.find(item => item.id === product.id);
     if (existingItem) {
-      // Increase quantity if already in cart
-      setSelectedProducts(prev => 
-        prev.map(item => 
-          item.id === product.id 
-            ? { ...item, quantity: item.quantity + 1 } 
+      if (existingItem.quantity >= product.estoque) {
+        setError(`Estoque máximo atingido para ${product.nome}. Disponível: ${product.estoque}`);
+        return;
+      }
+
+      setSelectedProducts((prev) =>
+        prev.map((item) =>
+          item.id === product.id
+            ? { ...item, quantity: Math.min(product.estoque, item.quantity + 1) }
             : item
         )
       );
+      setError(null);
     } else {
       // Add new item
       setSelectedProducts(prev => [...prev, { ...product, quantity: 1 }]);
@@ -282,7 +290,9 @@ const NewOrderModal: React.FC<NewOrderModalProps> = ({
                         <span className="w-4 text-center">{item.quantity}</span>
                         <button
                           onClick={() => handleQuantityChange(item.id, item.quantity + 1)}
-                          className="p-1 hover:bg-navy-surface"
+                          disabled={item.quantity >= item.estoque}
+                          aria-label={`Aumentar quantidade de ${item.nome}`}
+                          className="p-1 hover:bg-navy-surface disabled:cursor-not-allowed disabled:opacity-40"
                         >
                           +
                         </button>

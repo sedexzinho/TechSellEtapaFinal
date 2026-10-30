@@ -270,8 +270,8 @@ div.fixed.inset-0 > div[class*="bg-navy-surface"].flex {
 }
 
 .page-enter {
-  animation: fade-up 0.42s cubic-bezier(0.22, 1, 0.36, 1) both;
-  will-change: opacity, transform;
+  animation: fade-in 0.42s cubic-bezier(0.22, 1, 0.36, 1) both;
+  will-change: opacity;
 }
 
 .stagger-children > * {
