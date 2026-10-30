@@ -33,7 +33,7 @@ const Header = ({ isMobile, onToggleMobileMenu }: HeaderProps) => {
   };
 
   return (
-    <header className="sticky top-0 z-30 flex h-16 items-center justify-between gap-4 border-b border-navy-border bg-white/90 px-4 backdrop-blur-md lg:px-8">
+    <header className="sticky top-0 z-30 flex h-[4.5rem] items-center justify-between gap-4 border-b border-navy-border/80 bg-white/80 px-4 backdrop-blur-xl lg:px-10">
       <div className="flex min-w-0 items-center gap-3">
         {isMobile && (
           <button

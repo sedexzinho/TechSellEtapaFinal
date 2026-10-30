@@ -84,7 +84,7 @@ const Sidebar = ({ isMobile, collapsed, onToggleCollapse, onNavigate }: SidebarP
   return (
     <aside
       className={cn(
-        'fixed left-0 top-0 z-40 flex h-screen flex-col border-r border-sidebar-border bg-sidebar text-white transition-all duration-200',
+        'fixed left-0 top-0 z-40 flex h-screen flex-col border-r border-sidebar-border bg-sidebar text-white shadow-[8px_0_30px_rgba(2,6,23,0.08)] transition-all duration-200',
         collapsed && !isMobile ? 'w-[76px]' : 'w-64'
       )}
     >

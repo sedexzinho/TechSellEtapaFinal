@@ -264,7 +264,7 @@ const DashboardPage: React.FC = () => {
                 <CartesianGrid strokeDasharray="3 3" stroke="#E6EAF0" vertical={false} />
                 <XAxis dataKey="month" tick={{ fill: '#64748B', fontSize: 12 }} axisLine={false} tickLine={false} />
                 <YAxis tick={{ fill: '#64748B', fontSize: 12 }} axisLine={false} tickLine={false} />
-                <Tooltip formatter={(value: number) => formatCurrency(value)} />
+                <Tooltip formatter={(value) => formatCurrency(typeof value === 'number' ? value : 0)} />
                 <Area type="monotone" dataKey="value" name="Faturamento" stroke="#0284C7" fill="url(#revenueFill)" strokeWidth={2} />
               </AreaChart>
             </ResponsiveContainer>

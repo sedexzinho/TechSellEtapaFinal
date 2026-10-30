@@ -53,8 +53,10 @@ const Layout = () => {
 
       <div className={`flex min-h-screen flex-col transition-all duration-200 ${isMobile ? '' : sidebarCollapsed ? 'ml-[76px]' : 'ml-64'}`}>
         <Header isMobile={isMobile} onToggleMobileMenu={() => setIsMobileMenuOpen((value) => !value)} />
-        <main className="flex-1 overflow-y-auto px-4 py-6 lg:px-8">
-          <Outlet />
+        <main className="flex-1 overflow-y-auto px-4 py-6 lg:px-10 lg:py-8">
+          <div className="mx-auto w-full max-w-[1680px]">
+            <Outlet />
+          </div>
         </main>
       </div>
     </div>
