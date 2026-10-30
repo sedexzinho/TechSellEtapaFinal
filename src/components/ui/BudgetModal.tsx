@@ -29,6 +29,8 @@ const BudgetModal: React.FC<BudgetModalProps> = ({
   const [budgetItems, setBudgetItems] = useState<Array<BudgetItem & { id: number }>>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [isCustomerOpen, setIsCustomerOpen] = useState(false);
+  const [isVisitOpen, setIsVisitOpen] = useState(false);
 
   // Calculate total
   const total = budgetItems.reduce((sum, item) => sum + item.subtotal, 0);
@@ -170,7 +172,7 @@ const BudgetModal: React.FC<BudgetModalProps> = ({
 
   return (
     <div className="modal-backdrop">
-      <div className="modal-panel modal-form-panel bg-navy-surface rounded-xl w-full max-w-3xl max-h-[90vh] overflow-hidden flex">
+      <div className="modal-panel modal-form-panel relative bg-navy-surface rounded-xl w-full max-w-3xl max-h-[calc(100vh-3rem)] overflow-hidden flex">
         {/* Sidebar - Customer and visit selection */}
         <div className="w-72 border-r border-navy-border flex flex-col">
           <div className="p-4">
@@ -182,36 +184,73 @@ const BudgetModal: React.FC<BudgetModalProps> = ({
           {/* Customer selection */}
           <div className="p-4 border-b border-navy-border">
             <label className="block text-sm font-medium text-text-primary mb-1">Cliente *</label>
-            <select
-              value={customerId ?? ''}
-              onChange={(e) => setCustomerId(e.target.value === '' ? null : parseInt(e.target.value))}
-              className="w-full bg-navy-border rounded px-3 py-2 text-text-primary focus:outline-none focus:ring-2 focus:ring-blue-primary"
-            >
-              <option value="">Selecione um cliente</option>
-              {availableCustomers.map(customer => (
-                <option key={customer.id} value={customer.id}>
-                  {customer.nome} ({customer.cpfCnpj})
-                </option>
-              ))}
-            </select>
+            <div className="relative">
+              <button
+                type="button"
+                aria-haspopup="listbox"
+                aria-expanded={isCustomerOpen}
+                onClick={() => setIsCustomerOpen((open) => !open)}
+                onKeyDown={(event) => {
+                  if (event.key === 'Escape') setIsCustomerOpen(false);
+                }}
+                className="custom-select-trigger"
+              >
+                <span className={customerId ? 'text-text-primary' : 'text-text-secondary'}>
+                  {customerId
+                    ? availableCustomers.find((customer) => customer.id === customerId)?.nome
+                    : 'Selecione um cliente'}
+                </span>
+                <span aria-hidden="true" className="custom-select-chevron">⌄</span>
+              </button>
+              {isCustomerOpen && (
+                <div role="listbox" aria-label="Clientes" className="custom-select-menu">
+                  <button type="button" role="option" aria-selected={customerId === null} className="custom-select-option" onClick={() => { setCustomerId(null); setIsCustomerOpen(false); }}>
+                    Selecione um cliente
+                  </button>
+                  {availableCustomers.map((customer) => (
+                    <button key={customer.id} type="button" role="option" aria-selected={customer.id === customerId} className="custom-select-option" onClick={() => { setCustomerId(customer.id); setIsCustomerOpen(false); }}>
+                      <span>{customer.nome}</span>
+                      <small>{customer.cpfCnpj}</small>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
           
           {/* Visit selection (only for creating new budget from visit) */}
           {!budget && (
             <div className="p-4 border-b border-navy-border">
               <label className="block text-sm font-medium text-text-primary mb-1">Vincular à visita (opcional)</label>
-              <select
-                value={visitId ?? ''}
-                onChange={(e) => setVisitId(e.target.value === '' ? null : parseInt(e.target.value))}
-                className="w-full bg-navy-border rounded px-3 py-2 text-text-primary focus:outline-none focus:ring-2 focus:ring-blue-primary"
-              >
-                <option value="">Nenhuma visita</option>
-                {visits.map(visit => (
-                  <option key={visit.id} value={visit.id}>
-                    Visita #{visit.id} - {visit.customerName}
-                  </option>
-                ))}
-              </select>
+              <div className="relative">
+                <button
+                  type="button"
+                  aria-haspopup="listbox"
+                  aria-expanded={isVisitOpen}
+                  onClick={() => setIsVisitOpen((open) => !open)}
+                  onKeyDown={(event) => {
+                    if (event.key === 'Escape') setIsVisitOpen(false);
+                  }}
+                  className="custom-select-trigger"
+                >
+                  <span className={visitId ? 'text-text-primary' : 'text-text-secondary'}>
+                    {visitId ? `Visita #${visitId} - ${visits.find((visit) => visit.id === visitId)?.customerName}` : 'Nenhuma visita'}
+                  </span>
+                  <span aria-hidden="true" className="custom-select-chevron">⌄</span>
+                </button>
+                {isVisitOpen && (
+                  <div role="listbox" aria-label="Visitas disponíveis" className="custom-select-menu">
+                    <button type="button" role="option" aria-selected={visitId === null} className="custom-select-option" onClick={() => { setVisitId(null); setIsVisitOpen(false); }}>
+                      Nenhuma visita
+                    </button>
+                    {visits.map((visit) => (
+                      <button key={visit.id} type="button" role="option" aria-selected={visit.id === visitId} className="custom-select-option" onClick={() => { setVisitId(visit.id); setIsVisitOpen(false); }}>
+                        Visita #{visit.id} - {visit.customerName}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
             </div>
           )}
           
