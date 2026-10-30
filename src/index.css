@@ -628,6 +628,37 @@ div.fixed.inset-0 > div[class*="bg-navy-surface"].flex {
   }
 }
 
+.custom-select-trigger {
+  @apply flex w-full items-center justify-between rounded-lg border border-navy-border bg-navy-border px-3 py-2.5 text-left text-sm text-text-primary transition-colors;
+}
+
+.custom-select-trigger:hover,
+.custom-select-trigger:focus-visible {
+  @apply border-blue-primary outline-none ring-2 ring-blue-primary/30;
+}
+
+.custom-select-chevron {
+  @apply text-text-secondary;
+}
+
+.custom-select-menu {
+  @apply absolute left-0 right-0 top-[calc(100%+0.35rem)] z-[120] max-h-56 overflow-y-auto rounded-lg border border-navy-border bg-navy-card p-1 shadow-2xl;
+}
+
+.custom-select-option {
+  @apply flex w-full flex-col items-start gap-0.5 rounded-md px-3 py-2 text-left text-sm text-text-primary transition-colors;
+}
+
+.custom-select-option:hover,
+.custom-select-option:focus-visible,
+.custom-select-option[aria-selected='true'] {
+  @apply bg-blue-primary/20 text-white outline-none;
+}
+
+.custom-select-option small {
+  @apply text-xs text-text-secondary;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html:focus-within {
     scroll-behavior: auto;
