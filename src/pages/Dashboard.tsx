@@ -250,7 +250,11 @@ const DashboardPage: React.FC = () => {
                 <CartesianGrid strokeDasharray="3 3" stroke="#E6EAF0" vertical={false} />
                 <XAxis dataKey="month" tick={{ fill: '#64748B', fontSize: 12 }} axisLine={false} tickLine={false} />
                 <YAxis tick={{ fill: '#64748B', fontSize: 12 }} axisLine={false} tickLine={false} allowDecimals={false} />
-                <Tooltip cursor={{ fill: 'rgba(15, 118, 110, 0.06)' }} />
+                <Tooltip
+                  cursor={{ fill: 'rgba(15, 118, 110, 0.06)' }}
+                  contentStyle={{ borderRadius: 12, border: '1px solid #E6EAF0', boxShadow: '0 12px 28px rgba(15, 23, 42, 0.12)', fontSize: 12 }}
+                  labelStyle={{ color: '#0F172A', fontWeight: 600, marginBottom: 4 }}
+                />
                 <Bar dataKey="value" name="Pedidos" fill="#0F766E" radius={[6, 6, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
@@ -271,7 +275,11 @@ const DashboardPage: React.FC = () => {
                 <CartesianGrid strokeDasharray="3 3" stroke="#E6EAF0" vertical={false} />
                 <XAxis dataKey="month" tick={{ fill: '#64748B', fontSize: 12 }} axisLine={false} tickLine={false} />
                 <YAxis tick={{ fill: '#64748B', fontSize: 12 }} axisLine={false} tickLine={false} />
-                <Tooltip formatter={(value) => formatCurrency(typeof value === 'number' ? value : 0)} />
+                <Tooltip
+                  formatter={(value) => formatCurrency(typeof value === 'number' ? value : 0)}
+                  contentStyle={{ borderRadius: 12, border: '1px solid #E6EAF0', boxShadow: '0 12px 28px rgba(15, 23, 42, 0.12)', fontSize: 12 }}
+                  labelStyle={{ color: '#0F172A', fontWeight: 600, marginBottom: 4 }}
+                />
                 <Area type="monotone" dataKey="value" name="Faturamento" stroke="#0284C7" fill="url(#revenueFill)" strokeWidth={2} />
               </AreaChart>
             </ResponsiveContainer>

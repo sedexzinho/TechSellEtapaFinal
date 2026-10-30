@@ -1,3 +1,14 @@
+#root {
+  min-height: 100vh;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
 .counter {
   font-size: 16px;
   padding: 5px 10px;
