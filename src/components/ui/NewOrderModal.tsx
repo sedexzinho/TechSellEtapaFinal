@@ -19,6 +19,7 @@ const NewOrderModal: React.FC<NewOrderModalProps> = ({
   products,
 }) => {
   const [customerId, setCustomerId] = useState<number | null>(null);
+  const [isCustomerOpen, setIsCustomerOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedProducts, setSelectedProducts] = useState<Array<Product & { quantity: number }>>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -136,18 +137,64 @@ const NewOrderModal: React.FC<NewOrderModalProps> = ({
           {/* Customer selection */}
           <div className="p-4 border-b border-navy-border">
             <label className="block text-sm font-medium text-text-primary mb-1">Cliente *</label>
-            <select
-              value={customerId ?? ''}
-              onChange={(e) => setCustomerId(e.target.value === '' ? null : parseInt(e.target.value))}
-              className="w-full bg-navy-border rounded px-3 py-2 text-text-primary focus:outline-none focus:ring-2 focus:ring-blue-primary"
-            >
-              <option value="">Selecione um cliente</option>
-              {customers.map(customer => (
-                <option key={customer.id} value={customer.id}>
-                  {customer.nome} ({customer.cpfCnpj})
-                </option>
-              ))}
-            </select>
+            <div className="relative">
+              <button
+                type="button"
+                aria-haspopup="listbox"
+                aria-expanded={isCustomerOpen}
+                onClick={() => setIsCustomerOpen((open) => !open)}
+                onKeyDown={(event) => {
+                  if (event.key === 'Escape') setIsCustomerOpen(false);
+                }}
+                className="flex min-h-11 w-full items-center justify-between rounded-xl border border-navy-border bg-navy-card px-3 text-left text-sm text-text-primary transition-colors hover:border-cyan-accent/60 focus:outline-none focus:ring-2 focus:ring-cyan-accent/30"
+              >
+                <span className={customerId ? 'text-text-primary' : 'text-text-primary/50'}>
+                  {customerId
+                    ? customers.find((customer) => customer.id === customerId)?.nome
+                    : 'Selecione um cliente'}
+                </span>
+                <span aria-hidden="true" className={`ml-3 transition-transform ${isCustomerOpen ? 'rotate-180' : ''}`}>
+                  ⌄
+                </span>
+              </button>
+
+              {isCustomerOpen && (
+                <div
+                  role="listbox"
+                  aria-label="Clientes disponíveis"
+                  className="customer-select-menu absolute left-0 right-0 z-30 mt-2 max-h-56 overflow-y-auto rounded-xl border border-navy-border bg-navy-card p-1 shadow-elevated"
+                >
+                  <button
+                    type="button"
+                    role="option"
+                    aria-selected={customerId === null}
+                    onClick={() => {
+                      setCustomerId(null);
+                      setIsCustomerOpen(false);
+                    }}
+                    className="customer-select-option w-full rounded-lg px-3 py-2 text-left text-sm text-text-primary/60"
+                  >
+                    Selecione um cliente
+                  </button>
+                  {customers.map((customer) => (
+                    <button
+                      type="button"
+                      role="option"
+                      aria-selected={customer.id === customerId}
+                      key={customer.id}
+                      onClick={() => {
+                        setCustomerId(customer.id);
+                        setIsCustomerOpen(false);
+                        setError(null);
+                      }}
+                      className={`customer-select-option w-full rounded-lg px-3 py-2 text-left text-sm ${customer.id === customerId ? 'customer-select-option-active' : 'text-text-primary'}`}
+                    >
+                      {customer.nome} <span className="text-text-primary/50">({customer.cpfCnpj})</span>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
           
           {/* Product search */}
