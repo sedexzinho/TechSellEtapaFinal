@@ -270,10 +270,12 @@ div.fixed.inset-0 > div[class*="bg-navy-surface"].flex {
 
 .page-enter {
   animation: fade-up 0.42s cubic-bezier(0.22, 1, 0.36, 1) both;
+  will-change: opacity, transform;
 }
 
 .stagger-children > * {
   animation: fade-up 0.48s cubic-bezier(0.22, 1, 0.36, 1) both;
+  will-change: opacity, transform;
 }
 
 .stagger-children > *:nth-child(1) { animation-delay: 0.04s; }
@@ -387,6 +389,22 @@ div.fixed.inset-0 > div[class*="bg-navy-surface"].flex {
 
 .login-card {
   animation: scale-in 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    will-change: auto !important;
+  }
+
+  .spinner {
+    animation: none;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
