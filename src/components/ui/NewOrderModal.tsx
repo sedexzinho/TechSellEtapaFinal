@@ -124,7 +124,7 @@ const NewOrderModal: React.FC<NewOrderModalProps> = ({
 
   return (
     <div className="modal-backdrop">
-      <div className="modal-panel bg-navy-surface rounded-xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex">
+      <div className="modal-panel modal-form-panel bg-navy-surface rounded-xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex">
         {/* Sidebar - Customer selection and product search */}
         <div className="w-64 border-r border-navy-border flex flex-col">
           <div className="p-4">
