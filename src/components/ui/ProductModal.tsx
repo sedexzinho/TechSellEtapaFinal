@@ -42,51 +42,57 @@ const ProductModal = ({ isOpen, onClose, onSave, initialData }: ProductModalProp
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-      <div className="w-full max-w-2xl rounded-2xl bg-navy-surface p-6">
-        <div className="flex justify-between items-start mb-4">
-          <h2 className="text-xl font-bold">
-            {initialData ? 'Editar Produto' : 'Novo Produto'}
-          </h2>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/45 p-4 backdrop-blur-sm">
+      <div className="surface-card max-h-[90vh] w-full max-w-2xl overflow-y-auto p-6 sm:p-7">
+        <div className="mb-6 flex items-start justify-between gap-4">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-blue-primary">Catálogo</p>
+            <h2 className="mt-1 text-xl font-bold text-text-primary">
+              {initialData ? 'Editar Produto' : 'Novo Produto'}
+            </h2>
+            <p className="mt-1 text-sm text-text-secondary">Mantenha os dados comerciais e de estoque atualizados.</p>
+          </div>
           <button
+            type="button"
             onClick={onClose}
-            className="text-text-secondary hover:text-text-primary"
+            aria-label="Fechar modal"
+            className="btn-ghost rounded-full px-2 text-xl leading-none"
           >
             ×
           </button>
         </div>
         
         {error && (
-          <div className="bg-red-600/20 border-l-4 border-red-600 p-4 mb-4">
-            <p className="text-red-400">{error}</p>
+          <div className="alert-error mb-5">
+            <p>{error}</p>
           </div>
         )}
         
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-5">
           <div>
-            <label className="block text-sm font-medium mb-1">Nome</label>
+            <label className="field-label">Nome</label>
             <input
               type="text"
               value={formData.nome}
               onChange={(e) => setFormData(prev => ({ ...prev, nome: e.target.value }))}
               required
-              className="w-full px-3 py-2 border border-navy-border rounded bg-navy-darker text-text-primary focus:outline-none focus:ring-2 focus:ring-blue-primary"
+              className="field-control"
             />
           </div>
           
           <div>
-            <label className="block text-sm font-medium mb-1">Descrição</label>
+            <label className="field-label">Descrição</label>
             <textarea
               value={formData.descricao}
               onChange={(e) => setFormData(prev => ({ ...prev, descricao: e.target.value }))}
               rows={3}
-              className="w-full px-3 py-2 border border-navy-border rounded bg-navy-darker text-text-primary focus:outline-none focus:ring-2 focus:ring-blue-primary"
+              className="field-control"
             />
           </div>
           
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium mb-1">Preço</label>
+              <label className="field-label">Preço</label>
               <input
                 type="number"
                 step="0.01"
@@ -94,59 +100,59 @@ const ProductModal = ({ isOpen, onClose, onSave, initialData }: ProductModalProp
                 value={formData.preco}
                 onChange={(e) => setFormData(prev => ({ ...prev, preco: parseFloat(e.target.value) || 0 }))}
                 required
-                className="w-full px-3 py-2 border border-navy-border rounded bg-navy-darker text-text-primary focus:outline-none focus:ring-2 focus:ring-blue-primary"
+                className="field-control"
               />
             </div>
             
             <div>
-              <label className="block text-sm font-medium mb-1">Categoria</label>
+              <label className="field-label">Categoria</label>
               <input
                 type="text"
                 value={formData.categoria}
                 onChange={(e) => setFormData(prev => ({ ...prev, categoria: e.target.value }))}
                 required
-                className="w-full px-3 py-2 border border-navy-border rounded bg-navy-darker text-text-primary focus:outline-none focus:ring-2 focus:ring-blue-primary"
+                className="field-control"
               />
             </div>
           </div>
           
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium mb-1">Estoque Atual</label>
+              <label className="field-label">Estoque Atual</label>
               <input
                 type="number"
                 min="0"
                 value={formData.estoque}
                 onChange={(e) => setFormData(prev => ({ ...prev, estoque: parseInt(e.target.value) || 0 }))}
                 required
-                className="w-full px-3 py-2 border border-navy-border rounded bg-navy-darker text-text-primary focus:outline-none focus:ring-2 focus:ring-blue-primary"
+                className="field-control"
               />
             </div>
             
             <div>
-              <label className="block text-sm font-medium mb-1">Estoque Mínimo</label>
+              <label className="field-label">Estoque Mínimo</label>
               <input
                 type="number"
                 min="0"
                 value={formData.estoqueMinimo}
                 onChange={(e) => setFormData(prev => ({ ...prev, estoqueMinimo: parseInt(e.target.value) || 0 }))}
                 required
-                className="w-full px-3 py-2 border border-navy-border rounded bg-navy-darker text-text-primary focus:outline-none focus:ring-2 focus:ring-blue-primary"
+                className="field-control"
               />
             </div>
           </div>
           
           <div>
-            <label className="block text-sm font-medium mb-1">Código de Barras</label>
+            <label className="field-label">Código de Barras</label>
             <input
               type="text"
               value={formData.codigoBarras}
               onChange={(e) => setFormData(prev => ({ ...prev, codigoBarras: e.target.value }))}
-              className="w-full px-3 py-2 border border-navy-border rounded bg-navy-darker text-text-primary focus:outline-none focus:ring-2 focus:ring-blue-primary"
+              className="field-control"
             />
           </div>
           
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center gap-2">
             <input
               type="checkbox"
               checked={formData.ativo}
@@ -156,7 +162,7 @@ const ProductModal = ({ isOpen, onClose, onSave, initialData }: ProductModalProp
             <label className="text-text-secondary">Produto ativo</label>
           </div>
           
-          <div className="flex justify-end space-x-3 mt-6">
+          <div className="mt-2 flex justify-end gap-3 border-t border-navy-border pt-5">
             <button
               type="button"
               onClick={onClose}

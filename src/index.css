@@ -12,6 +12,7 @@
   body {
     @apply bg-navy-dark text-text-primary font-sans;
     font-feature-settings: "ss01" on, "cv11" on;
+    background-image: radial-gradient(circle at 90% -10%, rgba(20, 184, 166, 0.08), transparent 34rem);
   }
 
   ::selection {
@@ -21,11 +22,11 @@
 
 @layer components {
   .page-shell {
-    @apply space-y-6;
+    @apply flex flex-col gap-6;
   }
 
   .page-title {
-    @apply text-[1.65rem] font-semibold tracking-tight text-text-primary;
+    @apply text-[1.75rem] font-semibold tracking-[-0.03em] text-text-primary sm:text-[2rem];
   }
 
   .page-subtitle {
@@ -34,10 +35,20 @@
 
   .surface-card {
     @apply rounded-card border border-navy-border bg-navy-surface shadow-card;
+    background-image: linear-gradient(135deg, rgba(255, 255, 255, 0.99), rgba(248, 250, 252, 0.94));
+  }
+
+  .surface-card > .border-b {
+    @apply border-navy-border/80;
   }
 
   .stat-card {
-    @apply surface-card p-5 transition-shadow duration-200 hover:shadow-md;
+    @apply surface-card relative overflow-hidden p-5 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-elevated;
+  }
+
+  .stat-card::after {
+    content: '';
+    @apply absolute -right-8 -top-8 size-24 rounded-full bg-teal-500/5;
   }
 
   .section-title {
@@ -98,6 +109,10 @@
 
   .data-table tbody tr {
     @apply border-b border-navy-border/80 bg-white transition-colors hover:bg-slate-50;
+  }
+
+  .data-table tbody tr:last-child {
+    @apply border-b-0;
   }
 
   .empty-state {
