@@ -23,6 +23,8 @@ const VisitModal: React.FC<VisitModalProps> = ({
   const [notes, setNotes] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [isCustomerOpen, setIsCustomerOpen] = useState(false);
+  const [isStatusOpen, setIsStatusOpen] = useState(false);
 
   useEffect(() => {
     if (visit) {
@@ -82,18 +84,57 @@ const VisitModal: React.FC<VisitModalProps> = ({
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-text-primary mb-1">Cliente *</label>
-            <select
-              value={customerId ?? ''}
-              onChange={(e) => setCustomerId(e.target.value === '' ? null : parseInt(e.target.value))}
-              className="w-full bg-navy-border rounded px-3 py-2 text-text-primary focus:outline-none focus:ring-2 focus:ring-blue-primary"
-            >
-              <option value="">Selecione um cliente</option>
-              {customers.map(customer => (
-                <option key={customer.id} value={customer.id}>
-                  {customer.nome} ({customer.cpfCnpj})
-                </option>
-              ))}
-            </select>
+            <div className="relative">
+              <button
+                type="button"
+                aria-haspopup="listbox"
+                aria-expanded={isCustomerOpen}
+                onClick={() => setIsCustomerOpen((open) => !open)}
+                onKeyDown={(event) => {
+                  if (event.key === 'Escape') setIsCustomerOpen(false);
+                }}
+                className="custom-select-trigger"
+              >
+                <span className={customerId ? 'text-text-primary' : 'text-text-secondary'}>
+                  {customerId
+                    ? customers.find((customer) => customer.id === customerId)?.nome
+                    : 'Selecione um cliente'}
+                </span>
+                <span aria-hidden="true" className="custom-select-chevron">⌄</span>
+              </button>
+              {isCustomerOpen && (
+                <div role="listbox" aria-label="Clientes" className="custom-select-menu">
+                  <button
+                    type="button"
+                    role="option"
+                    aria-selected={customerId === null}
+                    className="custom-select-option"
+                    onClick={() => {
+                      setCustomerId(null);
+                      setIsCustomerOpen(false);
+                    }}
+                  >
+                    Selecione um cliente
+                  </button>
+                  {customers.map((customer) => (
+                    <button
+                      key={customer.id}
+                      type="button"
+                      role="option"
+                      aria-selected={customer.id === customerId}
+                      className="custom-select-option"
+                      onClick={() => {
+                        setCustomerId(customer.id);
+                        setIsCustomerOpen(false);
+                      }}
+                    >
+                      <span>{customer.nome}</span>
+                      <small>{customer.cpfCnpj}</small>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
           <div>
             <label className="block text-sm font-medium text-text-primary mb-1">Data *</label>
@@ -106,15 +147,46 @@ const VisitModal: React.FC<VisitModalProps> = ({
           </div>
           <div>
             <label className="block text-sm font-medium text-text-primary mb-1">Status *</label>
-            <select
-              value={status}
-              onChange={(e) => setStatus(e.target.value as 'agendada' | 'realizada' | 'cancelada')}
-              className="w-full bg-navy-border rounded px-3 py-2 text-text-primary focus:outline-none focus:ring-2 focus:ring-blue-primary"
-            >
-              <option value="agendada">Agendada</option>
-              <option value="realizada">Realizada</option>
-              <option value="cancelada">Cancelada</option>
-            </select>
+            <div className="relative">
+              <button
+                type="button"
+                aria-haspopup="listbox"
+                aria-expanded={isStatusOpen}
+                onClick={() => setIsStatusOpen((open) => !open)}
+                onKeyDown={(event) => {
+                  if (event.key === 'Escape') setIsStatusOpen(false);
+                }}
+                className="custom-select-trigger"
+              >
+                <span className="text-text-primary">
+                  {status === 'agendada' ? 'Agendada' : status === 'realizada' ? 'Realizada' : 'Cancelada'}
+                </span>
+                <span aria-hidden="true" className="custom-select-chevron">⌄</span>
+              </button>
+              {isStatusOpen && (
+                <div role="listbox" aria-label="Status da visita" className="custom-select-menu">
+                  {[
+                    ['agendada', 'Agendada'],
+                    ['realizada', 'Realizada'],
+                    ['cancelada', 'Cancelada'],
+                  ].map(([value, label]) => (
+                    <button
+                      key={value}
+                      type="button"
+                      role="option"
+                      aria-selected={status === value}
+                      className="custom-select-option"
+                      onClick={() => {
+                        setStatus(value as 'agendada' | 'realizada' | 'cancelada');
+                        setIsStatusOpen(false);
+                      }}
+                    >
+                      {label}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
           <div>
             <label className="block text-sm font-medium text-text-primary mb-1">Observações</label>
