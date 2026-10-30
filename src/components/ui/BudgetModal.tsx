@@ -170,7 +170,7 @@ const BudgetModal: React.FC<BudgetModalProps> = ({
 
   return (
     <div className="modal-backdrop">
-      <div className="modal-panel bg-navy-surface rounded-xl w-full max-w-3xl max-h-[90vh] overflow-hidden flex">
+      <div className="modal-panel modal-form-panel bg-navy-surface rounded-xl w-full max-w-3xl max-h-[90vh] overflow-hidden flex">
         {/* Sidebar - Customer and visit selection */}
         <div className="w-72 border-r border-navy-border flex flex-col">
           <div className="p-4">

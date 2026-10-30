@@ -165,25 +165,48 @@ const PedidosPage: React.FC = () => {
   }
 
   const statusClass = (status: Order['status']) =>
-    status === 'confirmado' ? 'bg-emerald-50 text-emerald-700' :
-    status === 'cancelado' ? 'bg-red-50 text-red-700' :
-    'bg-amber-50 text-amber-700';
+    status === 'confirmado' ? 'order-status order-status-success' :
+    status === 'cancelado' ? 'order-status order-status-danger' :
+    'order-status order-status-warning';
+
+  const confirmedOrders = orders.filter((order) => order.status === 'confirmado').length;
+  const pendingOrders = orders.filter((order) => order.status === 'rascunho').length;
+  const totalValue = orders.reduce((sum, order) => sum + order.total, 0);
 
   return (
-    <div className="page-shell">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+    <div className="page-shell orders-page">
+      <div className="orders-hero flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
+          <span className="eyebrow">Operação comercial</span>
           <h1 className="page-title">Pedidos</h1>
-          <p className="page-subtitle">Acompanhamento de rascunhos, confirmações e cancelamentos.</p>
+          <p className="page-subtitle">Acompanhe o ciclo completo dos pedidos da sua operação.</p>
         </div>
         {user?.perfil === 'ADMIN' && (
           <button
             onClick={handleNewOrder}
-            className="btn-primary"
+            className="btn-primary orders-primary-action"
           >
             Novo Pedido
           </button>
         )}
+      </div>
+
+      <div className="orders-summary-grid">
+        <div className="orders-summary-card">
+          <span className="orders-summary-label">Pedidos no período</span>
+          <strong>{orders.length}</strong>
+          <span className="orders-summary-meta">Todos os registros</span>
+        </div>
+        <div className="orders-summary-card orders-summary-card-accent">
+          <span className="orders-summary-label">Confirmados</span>
+          <strong>{confirmedOrders}</strong>
+          <span className="orders-summary-meta">Prontos para acompanhamento</span>
+        </div>
+        <div className="orders-summary-card">
+          <span className="orders-summary-label">Em aberto</span>
+          <strong>{pendingOrders}</strong>
+          <span className="orders-summary-meta">Valor total R$ {totalValue.toFixed(2)}</span>
+        </div>
       </div>
       
       {/* Novo Pedido Modal */}

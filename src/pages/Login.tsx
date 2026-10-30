@@ -42,7 +42,7 @@ const LoginPage = () => {
           </p>
         </div>
 
-        <div className="login-card w-full max-w-md justify-self-center rounded-3xl border border-white/10 bg-white p-8 text-text-primary shadow-elevated">
+        <div className="login-card w-full max-w-md justify-self-center rounded-3xl border border-white/10 bg-[#111A2D] p-8 text-white shadow-elevated">
           <div className="mb-8 text-center">
             <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-teal-700 text-white lg:hidden">
               <Gem className="h-5 w-5" />

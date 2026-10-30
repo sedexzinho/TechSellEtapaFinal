@@ -34,7 +34,7 @@ const Header = ({ isMobile, onToggleMobileMenu }: HeaderProps) => {
   };
 
   return (
-    <header className="sticky top-0 z-30 flex h-[4.5rem] items-center justify-between gap-4 border-b border-navy-border/80 bg-white/80 px-4 backdrop-blur-xl lg:px-10">
+    <header className="sticky top-0 z-30 flex h-[4.5rem] items-center justify-between gap-4 border-b border-navy-border/80 bg-navy-dark/90 px-4 backdrop-blur-xl lg:px-10">
       <div className="flex min-w-0 items-center gap-3">
         {isMobile && (
           <button
@@ -57,7 +57,7 @@ const Header = ({ isMobile, onToggleMobileMenu }: HeaderProps) => {
           <input
             type="search"
             placeholder="Buscar no sistema..."
-            className="w-full rounded-full border-navy-border bg-slate-50 py-2 pl-9 pr-4 text-sm"
+            className="w-full rounded-full border-navy-border bg-navy-card py-2 pl-9 pr-4 text-sm"
             aria-label="Busca"
             readOnly
           />
@@ -66,7 +66,7 @@ const Header = ({ isMobile, onToggleMobileMenu }: HeaderProps) => {
 
       <div className="flex items-center gap-2 sm:gap-3">
         <NotificationMenu />
-        <div className="hidden items-center gap-2 rounded-full border border-navy-border bg-white py-1 pl-1 pr-3 sm:flex">
+        <div className="hidden items-center gap-2 rounded-full border border-navy-border bg-navy-card py-1 pl-1 pr-3 sm:flex">
           <div className="flex h-8 w-8 items-center justify-center rounded-full bg-teal-700 text-xs font-semibold text-white">
             {initials}
           </div>

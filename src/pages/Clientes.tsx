@@ -238,7 +238,7 @@ const ClientesPage: React.FC = () => {
       </div>
 
       {/* Modal de Adicionar/Editar Cliente */}
-      {showAddModal || showEditModal && (
+      {(showAddModal || showEditModal) && (
         <div className="modal-backdrop">
           <div className="modal-panel bg-navy-surface rounded-xl p-6 w-full max-w-md">
             <h2 className="mb-4 text-xl font-semibold text-text-primary">
