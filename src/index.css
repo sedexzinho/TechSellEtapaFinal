@@ -437,6 +437,91 @@ div.fixed.inset-0 > div[class*="bg-navy-surface"].flex {
   }
 }
 
+.orders-page {
+  gap: 1.5rem;
+}
+
+.orders-hero {
+  padding-bottom: 0.25rem;
+}
+
+.eyebrow {
+  display: inline-flex;
+  margin-bottom: 0.55rem;
+  color: #22D3EE;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.orders-primary-action {
+  min-width: 9.5rem;
+}
+
+.orders-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.9rem;
+}
+
+.orders-summary-card {
+  display: flex;
+  min-height: 7.5rem;
+  flex-direction: column;
+  justify-content: space-between;
+  border: 1px solid #263451;
+  border-radius: 1rem;
+  background: linear-gradient(145deg, rgba(21, 31, 51, 0.92), rgba(17, 26, 45, 0.9));
+  padding: 1rem 1.1rem;
+  box-shadow: 0 14px 34px rgba(2, 6, 23, 0.18);
+}
+
+.orders-summary-card-accent {
+  border-color: rgba(79, 124, 255, 0.42);
+  background: linear-gradient(145deg, rgba(40, 58, 101, 0.94), rgba(21, 31, 51, 0.95));
+}
+
+.orders-summary-label,
+.orders-summary-meta {
+  color: #94A3B8;
+  font-size: 0.78rem;
+}
+
+.orders-summary-card strong {
+  color: #F8FAFC;
+  font-size: 1.8rem;
+  line-height: 1;
+}
+
+.order-status {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  padding: 0.3rem 0.65rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.order-status-success {
+  border-color: rgba(52, 211, 153, 0.22);
+  background: rgba(52, 211, 153, 0.12);
+  color: #6EE7B7;
+}
+
+.order-status-warning {
+  border-color: rgba(251, 191, 36, 0.22);
+  background: rgba(251, 191, 36, 0.12);
+  color: #FCD34D;
+}
+
+.order-status-danger {
+  border-color: rgba(251, 113, 133, 0.22);
+  background: rgba(251, 113, 133, 0.12);
+  color: #FDA4AF;
+}
+
 .modal-form-panel {
   box-shadow: 0 24px 80px rgba(2, 6, 23, 0.48);
 }
@@ -470,6 +555,14 @@ div.fixed.inset-0 > div[class*="bg-navy-surface"].flex {
 }
 
 @media (max-width: 640px) {
+  .orders-summary-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .orders-primary-action {
+    width: 100%;
+  }
+
   .modal-form-panel,
   .modal-form-card {
     max-height: calc(100vh - 2rem);
