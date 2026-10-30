@@ -29,7 +29,7 @@ const LoginPage = () => {
     <div className="relative min-h-screen overflow-hidden bg-[#0C1222] text-white">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(20,184,166,0.18),_transparent_32%),radial-gradient(circle_at_bottom_right,_rgba(14,165,233,0.12),_transparent_28%)]" />
       <div className="relative mx-auto grid min-h-screen max-w-6xl items-center gap-10 px-6 py-10 lg:grid-cols-2">
-        <div className="hidden lg:block">
+        <div className="login-copy hidden lg:block">
           <div className="mb-8 flex h-12 w-12 items-center justify-center rounded-2xl bg-teal-400/15 text-teal-300">
             <Gem className="h-6 w-6" />
           </div>
@@ -42,7 +42,7 @@ const LoginPage = () => {
           </p>
         </div>
 
-        <div className="w-full max-w-md justify-self-center rounded-3xl border border-white/10 bg-white p-8 text-text-primary shadow-elevated">
+        <div className="login-card w-full max-w-md justify-self-center rounded-3xl border border-white/10 bg-white p-8 text-text-primary shadow-elevated">
           <div className="mb-8 text-center">
             <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-teal-700 text-white lg:hidden">
               <Gem className="h-5 w-5" />
@@ -79,7 +79,7 @@ const LoginPage = () => {
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-2 top-1/2 -translate-y-1/2 rounded-lg p-1.5 text-slate-500 hover:bg-slate-100"
+                  className="absolute right-2 top-1/2 -translate-y-1/2 rounded-lg p-1.5 text-slate-500 transition-colors hover:bg-slate-100"
                   aria-label="Mostrar/ocultar senha"
                 >
                   {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}

@@ -74,8 +74,8 @@ const VisitModal: React.FC<VisitModalProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-navy-surface rounded-xl w-full max-w-md">
+    <div className="modal-backdrop">
+      <div className="modal-panel bg-navy-surface rounded-xl w-full max-w-md">
         <h2 className="text-xl font-bold mb-4 text-text-primary">
           {visit ? 'Editar Visita' : 'Nova Visita'}
         </h2>

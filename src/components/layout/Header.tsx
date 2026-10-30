@@ -1,6 +1,7 @@
-import { Bell, LogOut, Menu, Search } from 'lucide-react';
+import { LogOut, Menu, Search } from 'lucide-react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../../store/authStore';
+import NotificationMenu from '../ui/NotificationMenu';
 
 interface HeaderProps {
   isMobile: boolean;
@@ -38,13 +39,13 @@ const Header = ({ isMobile, onToggleMobileMenu }: HeaderProps) => {
         {isMobile && (
           <button
             onClick={onToggleMobileMenu}
-            className="rounded-lg p-2 text-slate-600 hover:bg-slate-100"
+            className="icon-btn"
             aria-label="Abrir menu"
           >
             <Menu className="h-5 w-5" />
           </button>
         )}
-        <div className="min-w-0">
+        <div key={location.pathname} className="page-enter min-w-0">
           <h1 className="truncate text-base font-semibold text-text-primary">{meta.title}</h1>
           <p className="hidden truncate text-xs text-text-secondary sm:block">{meta.subtitle}</p>
         </div>
@@ -64,9 +65,7 @@ const Header = ({ isMobile, onToggleMobileMenu }: HeaderProps) => {
       </div>
 
       <div className="flex items-center gap-2 sm:gap-3">
-        <button className="rounded-xl p-2 text-slate-500 hover:bg-slate-100" aria-label="Notificações">
-          <Bell className="h-5 w-5" />
-        </button>
+        <NotificationMenu />
         <div className="hidden items-center gap-2 rounded-full border border-navy-border bg-white py-1 pl-1 pr-3 sm:flex">
           <div className="flex h-8 w-8 items-center justify-center rounded-full bg-teal-700 text-xs font-semibold text-white">
             {initials}
@@ -78,7 +77,7 @@ const Header = ({ isMobile, onToggleMobileMenu }: HeaderProps) => {
         </div>
         <button
           onClick={handleLogout}
-          className="rounded-xl p-2 text-slate-500 hover:bg-red-50 hover:text-red-600"
+          className="icon-btn hover:bg-red-50 hover:text-red-600"
           aria-label="Sair"
           title="Sair"
         >

@@ -8,7 +8,7 @@ const CustosPage = () => {
         <h1 className="page-title">Custos</h1>
         <p className="page-subtitle">A estrutura de custos do negócio é gerenciada junto às metas mensais.</p>
       </div>
-      <div className="surface-card flex flex-col items-start gap-4 p-8 sm:flex-row sm:items-center">
+      <div className="surface-card surface-card-hover flex flex-col items-start gap-4 p-8 sm:flex-row sm:items-center">
         <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-teal-50 text-teal-700">
           <Wallet className="h-5 w-5" />
         </div>

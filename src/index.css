@@ -36,14 +36,26 @@
   .surface-card {
     @apply rounded-card border border-navy-border bg-navy-surface shadow-card;
     background-image: linear-gradient(135deg, rgba(255, 255, 255, 0.99), rgba(248, 250, 252, 0.94));
+    transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.28s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.28s ease;
   }
 
   .surface-card > .border-b {
     @apply border-navy-border/80;
   }
 
+  .surface-card-hover:hover {
+    @apply -translate-y-0.5 shadow-elevated;
+    border-color: rgba(15, 118, 110, 0.22);
+  }
+
   .stat-card {
-    @apply surface-card relative overflow-hidden p-5 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-elevated;
+    @apply surface-card relative overflow-hidden p-5;
+    transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.28s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.28s ease;
+  }
+
+  .stat-card:hover {
+    @apply -translate-y-1 shadow-elevated;
+    border-color: rgba(15, 118, 110, 0.28);
   }
 
   .stat-card::after {
@@ -60,27 +72,51 @@
   }
 
   .field-control {
-    @apply w-full rounded-input border border-navy-border bg-white px-3 py-2.5 text-sm text-text-primary placeholder:text-text-disabled shadow-sm transition-colors duration-150 focus:border-blue-primary focus:outline-none focus:ring-2 focus:ring-blue-primary/20;
+    @apply w-full rounded-input border border-navy-border bg-white px-3 py-2.5 text-sm text-text-primary placeholder:text-text-disabled shadow-sm focus:border-blue-primary focus:outline-none focus:ring-2 focus:ring-blue-primary/20;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
   }
 
   .btn-primary {
-    @apply inline-flex items-center justify-center rounded-button bg-blue-primary px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition-all duration-150 hover:bg-blue-primary-hover focus:outline-none focus:ring-2 focus:ring-blue-primary/30 disabled:cursor-not-allowed disabled:opacity-50;
+    @apply inline-flex items-center justify-center rounded-button bg-blue-primary px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-primary-hover focus:outline-none focus:ring-2 focus:ring-blue-primary/30 disabled:cursor-not-allowed disabled:opacity-50;
   }
 
   .btn-secondary {
-    @apply inline-flex items-center justify-center rounded-button border border-navy-border bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 shadow-sm transition-colors duration-150 hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-blue-primary/20 disabled:cursor-not-allowed disabled:opacity-50;
+    @apply inline-flex items-center justify-center rounded-button border border-navy-border bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 shadow-sm hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-blue-primary/20 disabled:cursor-not-allowed disabled:opacity-50;
   }
 
   .btn-danger {
-    @apply inline-flex items-center justify-center rounded-button bg-red-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition-colors duration-150 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500/30 disabled:cursor-not-allowed disabled:opacity-50;
+    @apply inline-flex items-center justify-center rounded-button bg-red-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500/30 disabled:cursor-not-allowed disabled:opacity-50;
   }
 
   .btn-ghost {
-    @apply inline-flex items-center justify-center rounded-button px-3 py-2 text-sm font-medium text-slate-600 transition-colors duration-150 hover:bg-slate-100 hover:text-text-primary;
+    @apply inline-flex items-center justify-center rounded-button px-3 py-2 text-sm font-medium text-slate-600 hover:bg-slate-100 hover:text-text-primary;
   }
 
   .btn-sm {
-    @apply inline-flex items-center justify-center rounded-lg px-3 py-1.5 text-xs font-semibold transition-colors duration-150;
+    @apply inline-flex items-center justify-center rounded-lg px-3 py-1.5 text-xs font-semibold;
+  }
+
+  .btn-primary,
+  .btn-secondary,
+  .btn-danger,
+  .btn-ghost,
+  .btn-sm {
+    transition: transform 0.18s cubic-bezier(0.22, 1, 0.36, 1), background-color 0.18s ease, box-shadow 0.18s ease, color 0.18s ease, border-color 0.18s ease;
+  }
+
+  .btn-primary:hover,
+  .btn-secondary:hover,
+  .btn-danger:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 10px 22px rgba(15, 23, 42, 0.12);
+  }
+
+  .btn-primary:active,
+  .btn-secondary:active,
+  .btn-danger:active,
+  .btn-ghost:active,
+  .btn-sm:active {
+    transform: translateY(0) scale(0.98);
   }
 
   .btn-outline {
@@ -108,7 +144,8 @@
   }
 
   .data-table tbody tr {
-    @apply border-b border-navy-border/80 bg-white transition-colors hover:bg-slate-50;
+    @apply border-b border-navy-border/80 bg-white;
+    transition: background-color 0.18s ease, transform 0.18s ease;
   }
 
   .data-table tbody tr:last-child {
@@ -125,14 +162,17 @@
 
   .alert-error {
     @apply rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700;
+    animation: fade-up 0.35s cubic-bezier(0.22, 1, 0.36, 1) both;
   }
 
   .alert-success {
     @apply rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700;
+    animation: fade-up 0.35s cubic-bezier(0.22, 1, 0.36, 1) both;
   }
 
   .tab-btn {
-    @apply rounded-lg px-3.5 py-2 text-sm font-medium text-slate-600 transition-colors;
+    @apply rounded-lg px-3.5 py-2 text-sm font-medium text-slate-600;
+    transition: background-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
   }
 
   .tab-btn-active {
@@ -144,7 +184,8 @@
 input:not([type='checkbox']):not([type='radio']):not([type='range']):not([type='hidden']),
 select,
 textarea {
-  @apply rounded-input border border-navy-border bg-white text-text-primary shadow-sm transition-colors duration-150;
+  @apply rounded-input border border-navy-border bg-white text-text-primary shadow-sm;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
 }
 
 input:not([type='checkbox']):not([type='radio']):focus,
@@ -177,4 +218,208 @@ div.fixed.inset-0 > div[class*="bg-navy-surface"].flex {
 
 ::-webkit-scrollbar-track {
   background: transparent;
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes slide-in-left {
+  from {
+    opacity: 0;
+    transform: translateX(-16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes progress-fill {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
+@keyframes live-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.45; transform: scale(0.82); }
+}
+
+.page-enter {
+  animation: fade-up 0.42s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.stagger-children > * {
+  animation: fade-up 0.48s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.stagger-children > *:nth-child(1) { animation-delay: 0.04s; }
+.stagger-children > *:nth-child(2) { animation-delay: 0.09s; }
+.stagger-children > *:nth-child(3) { animation-delay: 0.14s; }
+.stagger-children > *:nth-child(4) { animation-delay: 0.19s; }
+.stagger-children > *:nth-child(5) { animation-delay: 0.24s; }
+.stagger-children > *:nth-child(6) { animation-delay: 0.29s; }
+.stagger-children > *:nth-child(7) { animation-delay: 0.34s; }
+.stagger-children > *:nth-child(8) { animation-delay: 0.39s; }
+.stagger-children > *:nth-child(9) { animation-delay: 0.44s; }
+.stagger-children > *:nth-child(10) { animation-delay: 0.49s; }
+.stagger-children > *:nth-child(11) { animation-delay: 0.54s; }
+.stagger-children > *:nth-child(12) { animation-delay: 0.59s; }
+.stagger-children > *:nth-child(n+13) { animation-delay: 0.62s; }
+
+.modal-backdrop {
+  @apply fixed inset-0 z-50 flex items-center justify-center bg-slate-950/45 p-4 backdrop-blur-sm;
+  animation: fade-in 0.22s ease both;
+}
+
+.modal-panel {
+  animation: scale-in 0.32s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.progress-fill {
+  transform-origin: left center;
+  animation: progress-fill 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.live-dot {
+  animation: live-dot 2.4s ease-in-out infinite;
+}
+
+.icon-btn {
+  @apply relative rounded-xl p-2 text-slate-500;
+  transition: background-color 0.18s ease, color 0.18s ease, transform 0.18s ease;
+}
+
+.icon-btn:hover {
+  @apply bg-slate-100 text-text-primary;
+}
+
+.icon-btn:hover svg {
+  transform: scale(1.08);
+}
+
+.icon-btn svg,
+.icon-lift {
+  transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.icon-lift:hover {
+  transform: scale(1.08);
+}
+
+.sidebar-link {
+  position: relative;
+  overflow: hidden;
+  transition: background-color 0.22s ease, color 0.22s ease, box-shadow 0.22s ease, transform 0.22s ease;
+}
+
+.sidebar-link svg {
+  transition: transform 0.22s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.sidebar-link:hover svg,
+.sidebar-link-active svg {
+  transform: scale(1.08);
+}
+
+.sidebar-link-active::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 18%;
+  height: 64%;
+  width: 3px;
+  border-radius: 999px;
+  background: #14B8A6;
+  animation: fade-in 0.25s ease both;
+}
+
+.sidebar-mobile-enter {
+  animation: slide-in-left 0.28s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.sidebar-label {
+  animation: fade-in 0.22s ease both;
+}
+
+.menu-overlay {
+  animation: fade-in 0.2s ease both;
+}
+
+.notification-panel {
+  @apply absolute right-0 top-[calc(100%+0.6rem)] z-40 w-80 overflow-hidden rounded-2xl border border-navy-border bg-white shadow-elevated;
+  opacity: 0;
+  transform: translateY(-8px) scale(0.98);
+  transition: opacity 0.2s ease, transform 0.22s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.notification-panel.is-open {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.login-copy {
+  animation: fade-up 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.login-card {
+  animation: scale-in 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html:focus-within {
+    scroll-behavior: auto;
+  }
+
+  .page-enter,
+  .stagger-children > *,
+  .modal-backdrop,
+  .modal-panel,
+  .alert-error,
+  .alert-success,
+  .progress-fill,
+  .live-dot,
+  .sidebar-mobile-enter,
+  .sidebar-label,
+  .menu-overlay,
+  .login-copy,
+  .login-card,
+  .sidebar-link-active::before,
+  .notification-panel {
+    animation: none !important;
+    transition: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .btn-primary:hover,
+  .btn-secondary:hover,
+  .btn-danger:hover,
+  .stat-card:hover,
+  .surface-card-hover:hover {
+    transform: none;
+  }
 }

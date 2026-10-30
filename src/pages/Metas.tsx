@@ -220,7 +220,7 @@ const MetasPage: FC = () => {
             <h2 className="text-xl font-bold text-text-primary mb-4">Visão Administrativa</h2>
             
             {/* Métricas gerais */}
-            <div className="mb-6 grid grid-cols-2 gap-4 md:grid-cols-4">
+            <div className="stagger-children mb-6 grid grid-cols-2 gap-4 md:grid-cols-4">
               <div className="stat-card">
                 <h3 className="text-sm font-medium text-text-secondary">Meta Total</h3>
                 <p className="text-2xl font-bold text-blue-primary">R$ {totalTarget.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
@@ -308,7 +308,7 @@ const MetasPage: FC = () => {
             <h2 className="text-xl font-bold text-text-primary mb-4">Gerenciamento de Custos</h2>
             
             {/* Métricas de custos */}
-            <div className="mb-6 grid grid-cols-2 gap-4 md:grid-cols-3">
+            <div className="stagger-children mb-6 grid grid-cols-2 gap-4 md:grid-cols-3">
               <div className="stat-card">
                 <h3 className="text-sm font-medium text-text-secondary">Custos Totais</h3>
                 <p className="text-2xl font-bold text-red-600">R$ {totalCosts.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
@@ -384,8 +384,8 @@ const MetasPage: FC = () => {
           
           {/* Modais para Admin */}
           {showAddGoalModal && (
-            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-              <div className="bg-navy-surface rounded-xl w-full max-w-md">
+            <div className="modal-backdrop">
+              <div className="modal-panel bg-navy-surface rounded-xl w-full max-w-md">
                 <h2 className="text-xl font-bold mb-4 text-text-primary">
                   {editGoal ? 'Editar Meta' : 'Nova Meta'}
                 </h2>
@@ -471,8 +471,8 @@ const MetasPage: FC = () => {
           )}
           
           {showAddCostModal && (
-            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-              <div className="bg-navy-surface rounded-xl w-full max-w-md">
+            <div className="modal-backdrop">
+              <div className="modal-panel bg-navy-surface rounded-xl w-full max-w-md">
                 <h2 className="text-xl font-bold mb-4 text-text-primary">
                   {editCost ? 'Editar Custo' : 'Novo Custo'}
                 </h2>
@@ -586,7 +586,7 @@ const MetasPage: FC = () => {
             <h2 className="text-xl font-bold text-text-primary mb-4">Seu Desempenho</h2>
             
             {/* Métricas pessoais */}
-            <div className="grid grid-cols-2 gap-4 mb-6">
+            <div className="stagger-children grid grid-cols-2 gap-4 mb-6">
               <div className="bg-navy-surface rounded-xl p-4">
                 <h3 className="text-sm font-medium text-text-secondary">Sua Meta</h3>
                 <p className="text-2xl font-bold text-blue-primary">R$ {userTarget.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
@@ -604,9 +604,9 @@ const MetasPage: FC = () => {
             {/* Barra de progresso */}
             <div className="bg-navy-surface rounded-xl p-6">
               <h3 className="text-lg font-bold text-text-primary mb-4">Progresso da Meta</h3>
-              <div className="bg-navy-border rounded-full h-4">
+              <div className="bg-navy-border rounded-full h-4 overflow-hidden">
                 <div
-                  className="h-4 rounded-full bg-blue-primary transition-all duration-500"
+                  className="progress-fill h-4 rounded-full bg-blue-primary"
                   style={{ width: `${Math.min(userPerformance, 100)}%` }}
                 ></div>
               </div>

@@ -146,11 +146,11 @@ const ProdutosPage = () => {
       {filteredProducts.length === 0 ? (
         <div className="empty-state">Nenhum produto encontrado com os filtros aplicados.</div>
       ) : (
-        <div className="grid gap-4 xl:grid-cols-2">
+        <div className="stagger-children grid gap-4 xl:grid-cols-2">
           {filteredProducts.map(product => {
             const status = getStockStatus(product.estoque, product.estoqueMinimo);
             return (
-            <div key={product.id} className="surface-card p-5">
+            <div key={product.id} className="surface-card surface-card-hover p-5">
               <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                 <div>
                   <h2 className="text-lg font-semibold">{product.nome}</h2>

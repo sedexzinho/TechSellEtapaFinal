@@ -65,16 +65,16 @@ const Sidebar = ({ isMobile, collapsed, onToggleCollapse, onNavigate }: SidebarP
             title={collapsed ? item.name : undefined}
             className={({ isActive }) =>
               cn(
-                'group flex items-center rounded-xl px-3 py-2.5 text-sm font-medium transition-colors duration-150',
+                'sidebar-link group flex items-center rounded-xl px-3 py-2.5 text-sm font-medium',
                 collapsed ? 'justify-center' : '',
                 isActive
-                  ? 'bg-teal-400/15 text-white shadow-sm ring-1 ring-inset ring-teal-300/20'
+                  ? 'sidebar-link-active bg-teal-400/15 text-white shadow-sm ring-1 ring-inset ring-teal-300/20'
                   : 'text-slate-300 hover:bg-white/5 hover:text-white'
               )
             }
           >
             <item.icon className={cn('h-[18px] w-[18px] shrink-0', collapsed ? '' : 'mr-3')} />
-            {!collapsed && <span className="truncate">{item.name}</span>}
+            {!collapsed && <span className="sidebar-label truncate">{item.name}</span>}
           </NavLink>
         ))}
       </nav>
@@ -84,12 +84,13 @@ const Sidebar = ({ isMobile, collapsed, onToggleCollapse, onNavigate }: SidebarP
   return (
     <aside
       className={cn(
-        'fixed left-0 top-0 z-40 flex h-screen flex-col border-r border-sidebar-border bg-sidebar text-white shadow-[8px_0_30px_rgba(2,6,23,0.08)] transition-all duration-200',
-        collapsed && !isMobile ? 'w-[76px]' : 'w-64'
+        'fixed left-0 top-0 z-40 flex h-screen flex-col border-r border-sidebar-border bg-sidebar text-white shadow-[8px_0_30px_rgba(2,6,23,0.08)] transition-[width] duration-300 ease-premium',
+        collapsed && !isMobile ? 'w-[76px]' : 'w-64',
+        isMobile ? 'sidebar-mobile-enter' : ''
       )}
     >
       <div className={cn('flex h-16 items-center border-b border-white/5', collapsed ? 'justify-center px-2' : 'px-4')}>
-        <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-teal-500/15 text-teal-300">
+        <div className="icon-lift flex h-9 w-9 items-center justify-center rounded-xl bg-teal-500/15 text-teal-300">
           <Gem className="h-4 w-4" />
         </div>
         {!collapsed && (
@@ -109,7 +110,7 @@ const Sidebar = ({ isMobile, collapsed, onToggleCollapse, onNavigate }: SidebarP
       <div className="border-t border-white/5 p-3">
         <button
           onClick={onToggleCollapse}
-          className="flex w-full items-center justify-center rounded-xl px-3 py-2 text-slate-300 transition-colors hover:bg-white/5 hover:text-white"
+          className="flex w-full items-center justify-center rounded-xl px-3 py-2 text-slate-300 transition-colors duration-200 hover:bg-white/5 hover:text-white"
           aria-label={collapsed ? 'Expandir menu' : 'Recolher menu'}
         >
           {collapsed ? <ChevronsRight className="h-4 w-4" /> : (

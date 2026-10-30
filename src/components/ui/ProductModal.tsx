@@ -42,8 +42,8 @@ const ProductModal = ({ isOpen, onClose, onSave, initialData }: ProductModalProp
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/45 p-4 backdrop-blur-sm">
-      <div className="surface-card max-h-[90vh] w-full max-w-2xl overflow-y-auto p-6 sm:p-7">
+    <div className="modal-backdrop">
+      <div className="modal-panel surface-card max-h-[90vh] w-full max-w-2xl overflow-y-auto p-6 sm:p-7">
         <div className="mb-6 flex items-start justify-between gap-4">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-blue-primary">Catálogo</p>

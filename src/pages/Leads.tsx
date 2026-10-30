@@ -128,7 +128,7 @@ const LeadsPage: React.FC = () => {
         {/* Novo Column */}
         <div className="space-y-3">
           <div
-            className={`min-h-[280px] rounded-2xl border-2 border-dashed p-4 ${dragOverColumn === 'novo' ? 'border-blue-primary bg-teal-50/50' : 'border-navy-border bg-slate-50'}`}
+            className={`min-h-[280px] rounded-2xl border-2 border-dashed p-4 transition-colors duration-200 ${dragOverColumn === 'novo' ? 'border-blue-primary bg-teal-50/50' : 'border-navy-border bg-slate-50'}`}
             onDragOver={(e) => handleDragOver(e, 'novo')}
             onDragLeave={handleDragLeave}
             onDrop={() => handleDrop('novo')}
@@ -141,7 +141,7 @@ const LeadsPage: React.FC = () => {
               {leadsByStatus.novo.map(lead => (
                 <div
                   key={lead.id}
-                  className={`cursor-grab rounded-xl border border-navy-border bg-white p-3 shadow-sm ${draggingLead === lead ? 'opacity-50' : ''}`}
+                  className={`cursor-grab rounded-xl border border-navy-border bg-white p-3 shadow-sm transition-transform duration-200 hover:-translate-y-0.5 hover:shadow-md ${draggingLead === lead ? 'opacity-50' : ''}`}
                   draggable={true}
                   onDragStart={() => handleDragStart(lead)}
                   onDragEnd={handleDragEnd}
@@ -183,7 +183,7 @@ const LeadsPage: React.FC = () => {
         {/* Contatado Column */}
         <div className="space-y-3">
           <div
-            className={`min-h-[280px] rounded-2xl border-2 border-dashed p-4 ${dragOverColumn === 'contatado' ? 'border-blue-primary bg-teal-50/50' : 'border-navy-border bg-slate-50'}`}
+            className={`min-h-[280px] rounded-2xl border-2 border-dashed p-4 transition-colors duration-200 ${dragOverColumn === 'contatado' ? 'border-blue-primary bg-teal-50/50' : 'border-navy-border bg-slate-50'}`}
             onDragOver={(e) => handleDragOver(e, 'contatado')}
             onDragLeave={handleDragLeave}
             onDrop={() => handleDrop('contatado')}
@@ -196,7 +196,7 @@ const LeadsPage: React.FC = () => {
               {leadsByStatus.contatado.map(lead => (
                 <div
                   key={lead.id}
-                  className={`cursor-grab rounded-xl border border-navy-border bg-white p-3 shadow-sm ${draggingLead === lead ? 'opacity-50' : ''}`}
+                  className={`cursor-grab rounded-xl border border-navy-border bg-white p-3 shadow-sm transition-transform duration-200 hover:-translate-y-0.5 hover:shadow-md ${draggingLead === lead ? 'opacity-50' : ''}`}
                   draggable={true}
                   onDragStart={() => handleDragStart(lead)}
                   onDragEnd={handleDragEnd}
@@ -243,7 +243,7 @@ const LeadsPage: React.FC = () => {
         {/* Convertido Column */}
         <div className="space-y-3">
           <div
-            className={`min-h-[280px] rounded-2xl border-2 border-dashed p-4 ${dragOverColumn === 'convertido' ? 'border-blue-primary bg-teal-50/50' : 'border-navy-border bg-slate-50'}`}
+            className={`min-h-[280px] rounded-2xl border-2 border-dashed p-4 transition-colors duration-200 ${dragOverColumn === 'convertido' ? 'border-blue-primary bg-teal-50/50' : 'border-navy-border bg-slate-50'}`}
             onDragOver={(e) => handleDragOver(e, 'convertido')}
             onDragLeave={handleDragLeave}
             onDrop={() => handleDrop('convertido')}
@@ -256,7 +256,7 @@ const LeadsPage: React.FC = () => {
               {leadsByStatus.convertido.map(lead => (
                 <div
                   key={lead.id}
-                  className={`cursor-grab rounded-xl border border-navy-border bg-white p-3 shadow-sm ${draggingLead === lead ? 'opacity-50' : ''}`}
+                  className={`cursor-grab rounded-xl border border-navy-border bg-white p-3 shadow-sm transition-transform duration-200 hover:-translate-y-0.5 hover:shadow-md ${draggingLead === lead ? 'opacity-50' : ''}`}
                   draggable={true}
                   onDragStart={() => handleDragStart(lead)}
                   onDragEnd={handleDragEnd}
@@ -293,7 +293,7 @@ const LeadsPage: React.FC = () => {
         {/* Perdido Column */}
         <div className="space-y-3">
           <div
-            className={`min-h-[280px] rounded-2xl border-2 border-dashed p-4 ${dragOverColumn === 'perdido' ? 'border-blue-primary bg-teal-50/50' : 'border-navy-border bg-slate-50'}`}
+            className={`min-h-[280px] rounded-2xl border-2 border-dashed p-4 transition-colors duration-200 ${dragOverColumn === 'perdido' ? 'border-blue-primary bg-teal-50/50' : 'border-navy-border bg-slate-50'}`}
             onDragOver={(e) => handleDragOver(e, 'perdido')}
             onDragLeave={handleDragLeave}
             onDrop={() => handleDrop('perdido')}
@@ -306,7 +306,7 @@ const LeadsPage: React.FC = () => {
               {leadsByStatus.perdido.map(lead => (
                 <div
                   key={lead.id}
-                  className={`cursor-grab rounded-xl border border-navy-border bg-white p-3 shadow-sm ${draggingLead === lead ? 'opacity-50' : ''}`}
+                  className={`cursor-grab rounded-xl border border-navy-border bg-white p-3 shadow-sm transition-transform duration-200 hover:-translate-y-0.5 hover:shadow-md ${draggingLead === lead ? 'opacity-50' : ''}`}
                   draggable={true}
                   onDragStart={() => handleDragStart(lead)}
                   onDragEnd={handleDragEnd}

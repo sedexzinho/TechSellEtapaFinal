@@ -237,8 +237,8 @@ const ReportsPage: React.FC = () => {
 
       {/* Pré-visualização do relatório */}
       {previewVisible && reportData.length > 0 && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-navy-surface rounded-xl w-full max-w-2xl max-h-[90vh] overflow-hidden">
+        <div className="modal-backdrop">
+          <div className="modal-panel bg-navy-surface rounded-xl w-full max-w-2xl max-h-[90vh] overflow-hidden">
             <div className="flex justify-between items-center p-4 border-b border-navy-border">
               <h2 className="text-xl font-bold text-text-primary">Pré-visualização do Relatório</h2>
               <button

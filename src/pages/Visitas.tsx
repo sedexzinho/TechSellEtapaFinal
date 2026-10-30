@@ -250,11 +250,11 @@ const VisitasPage: React.FC = () => {
           ) : visits.length === 0 ? (
             <div className="empty-state">Nenhuma visita encontrada</div>
           ) : (
-            <div className="grid gap-4 lg:grid-cols-2">
+            <div className="stagger-children grid gap-4 lg:grid-cols-2">
               {visits.map((visit) => (
                 <div
                   key={visit.id}
-                  className="surface-card p-5"
+                  className="surface-card surface-card-hover p-5"
                 >
                   <div className="flex justify-between items-start mb-2">
                     <div>
@@ -330,11 +330,11 @@ const VisitasPage: React.FC = () => {
           ) : budgets.length === 0 ? (
             <div className="empty-state">Nenhum orçamento encontrado</div>
           ) : (
-            <div className="grid gap-4 lg:grid-cols-2">
+            <div className="stagger-children grid gap-4 lg:grid-cols-2">
               {budgets.map((budget) => (
                 <div
                   key={budget.id}
-                  className="surface-card p-5"
+                  className="surface-card surface-card-hover p-5"
                 >
                   <div className="flex justify-between items-start mb-2">
                     <div>

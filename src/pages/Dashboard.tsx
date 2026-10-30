@@ -6,6 +6,8 @@ import { BudgetRepository } from '../repositories/budgetRepository';
 import { GoalRepository } from '../repositories/goalRepository';
 import { AlertTriangle, ClipboardList, FileSpreadsheet, TrendingUp, Truck, Wallet } from 'lucide-react';
 import { Area, AreaChart, Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
+import AnimatedNumber from '../components/ui/AnimatedNumber';
+import { usePrefersReducedMotion } from '../hooks/usePrefersReducedMotion';
 
 const DashboardPage: React.FC = () => {
   const [stats, setStats] = useState({
@@ -37,6 +39,7 @@ const DashboardPage: React.FC = () => {
   }>>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const prefersReducedMotion = usePrefersReducedMotion();
 
   const orderRepository = new OrderRepository();
   const productRepository = new ProductRepository();
@@ -201,13 +204,19 @@ const DashboardPage: React.FC = () => {
   const formatPercentage = (value: number) => 
     `${value.toFixed(1)}%`;
 
-  const cards = [
-    { label: 'Faturamento do mês', value: formatCurrency(stats.monthlyRevenue), icon: Wallet, tone: 'text-teal-700 bg-teal-50' },
-    { label: 'Pedidos no mês', value: String(stats.monthlyOrders), icon: ClipboardList, tone: 'text-sky-700 bg-sky-50' },
-    { label: 'Estoque baixo', value: String(stats.lowStockProducts), icon: AlertTriangle, tone: stats.lowStockProducts > 0 ? 'text-amber-700 bg-amber-50' : 'text-emerald-700 bg-emerald-50' },
-    { label: 'Orçamentos em aberto', value: String(stats.openBudgets), icon: FileSpreadsheet, tone: 'text-violet-700 bg-violet-50' },
-    { label: 'Visitas no mês', value: String(stats.monthlyVisits), icon: Truck, tone: 'text-slate-700 bg-slate-100' },
-    { label: 'Orçamentos no mês', value: String(stats.monthlyQuotes), icon: TrendingUp, tone: 'text-cyan-700 bg-cyan-50' },
+  const cards: Array<{
+    label: string;
+    value: number;
+    format?: (value: number) => string;
+    icon: typeof Wallet;
+    tone: string;
+  }> = [
+    { label: 'Faturamento do mês', value: stats.monthlyRevenue, format: formatCurrency, icon: Wallet, tone: 'text-teal-700 bg-teal-50' },
+    { label: 'Pedidos no mês', value: stats.monthlyOrders, icon: ClipboardList, tone: 'text-sky-700 bg-sky-50' },
+    { label: 'Estoque baixo', value: stats.lowStockProducts, icon: AlertTriangle, tone: stats.lowStockProducts > 0 ? 'text-amber-700 bg-amber-50' : 'text-emerald-700 bg-emerald-50' },
+    { label: 'Orçamentos em aberto', value: stats.openBudgets, icon: FileSpreadsheet, tone: 'text-violet-700 bg-violet-50' },
+    { label: 'Visitas no mês', value: stats.monthlyVisits, icon: Truck, tone: 'text-slate-700 bg-slate-100' },
+    { label: 'Orçamentos no mês', value: stats.monthlyQuotes, icon: TrendingUp, tone: 'text-cyan-700 bg-cyan-50' },
   ];
 
   return (
@@ -221,26 +230,28 @@ const DashboardPage: React.FC = () => {
           </p>
         </div>
         <div className="inline-flex w-fit items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-2 text-xs font-semibold text-emerald-700">
-          <span className="size-2 rounded-full bg-emerald-500" aria-hidden="true" />
+          <span className="live-dot size-2 rounded-full bg-emerald-500" aria-hidden="true" />
           Operação saudável
         </div>
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-6">
+      <div className="stagger-children grid gap-4 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-6">
         {cards.map((card) => (
           <div key={card.label} className="stat-card">
             <div className="mb-4 flex items-center justify-between">
               <p className="text-sm text-text-secondary">{card.label}</p>
-              <span className={`rounded-lg p-2 ${card.tone}`}>
+              <span className={`icon-lift rounded-lg p-2 ${card.tone}`}>
                 <card.icon className="h-4 w-4" />
               </span>
             </div>
-            <p className="text-2xl font-semibold tracking-tight">{card.value}</p>
+            <p className="text-2xl font-semibold tracking-tight">
+              <AnimatedNumber value={card.value} format={card.format} />
+            </p>
           </div>
         ))}
       </div>
 
-      <div className="grid gap-6 xl:grid-cols-2">
+      <div className="stagger-children grid gap-6 xl:grid-cols-2">
         <div className="surface-card p-5">
           <h2 className="section-title mb-1">Pedidos por mês</h2>
           <p className="mb-4 text-sm text-text-secondary">Volume de pedidos confirmados nos últimos 6 meses</p>
@@ -255,7 +266,7 @@ const DashboardPage: React.FC = () => {
                   contentStyle={{ borderRadius: 12, border: '1px solid #E6EAF0', boxShadow: '0 12px 28px rgba(15, 23, 42, 0.12)', fontSize: 12 }}
                   labelStyle={{ color: '#0F172A', fontWeight: 600, marginBottom: 4 }}
                 />
-                <Bar dataKey="value" name="Pedidos" fill="#0F766E" radius={[6, 6, 0, 0]} />
+                <Bar dataKey="value" name="Pedidos" fill="#0F766E" radius={[6, 6, 0, 0]} isAnimationActive={!prefersReducedMotion} animationDuration={900} animationEasing="ease-out" />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -280,7 +291,7 @@ const DashboardPage: React.FC = () => {
                   contentStyle={{ borderRadius: 12, border: '1px solid #E6EAF0', boxShadow: '0 12px 28px rgba(15, 23, 42, 0.12)', fontSize: 12 }}
                   labelStyle={{ color: '#0F172A', fontWeight: 600, marginBottom: 4 }}
                 />
-                <Area type="monotone" dataKey="value" name="Faturamento" stroke="#0284C7" fill="url(#revenueFill)" strokeWidth={2} />
+                <Area type="monotone" dataKey="value" name="Faturamento" stroke="#0284C7" fill="url(#revenueFill)" strokeWidth={2} isAnimationActive={!prefersReducedMotion} animationDuration={1100} animationEasing="ease-out" />
               </AreaChart>
             </ResponsiveContainer>
           </div>
@@ -307,16 +318,28 @@ const DashboardPage: React.FC = () => {
                 <tr key={vendor.name}>
                   <td className="font-medium">{vendor.name}</td>
                   <td>
-                    <span className={`badge ${
-                      vendor.goalAchievement >= 90 ? 'bg-emerald-50 text-emerald-700' :
-                      vendor.goalAchievement >= 70 ? 'bg-amber-50 text-amber-700' :
-                      'bg-red-50 text-red-700'
-                    }`}>
-                      {formatPercentage(vendor.goalAchievement)}
-                    </span>
+                    <div className="flex min-w-[140px] items-center gap-2">
+                      <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-slate-100">
+                        <div
+                          className={`progress-fill h-full rounded-full ${
+                            vendor.goalAchievement >= 90 ? 'bg-emerald-500' :
+                            vendor.goalAchievement >= 70 ? 'bg-amber-500' :
+                            'bg-red-500'
+                          }`}
+                          style={{ width: `${vendor.goalAchievement}%` }}
+                        />
+                      </div>
+                      <span className={`badge ${
+                        vendor.goalAchievement >= 90 ? 'bg-emerald-50 text-emerald-700' :
+                        vendor.goalAchievement >= 70 ? 'bg-amber-50 text-amber-700' :
+                        'bg-red-50 text-red-700'
+                      }`}>
+                        {formatPercentage(vendor.goalAchievement)}
+                      </span>
+                    </div>
                   </td>
-                  <td>{vendor.visits}</td>
-                  <td>{vendor.quotes}</td>
+                  <td><AnimatedNumber value={vendor.visits} /></td>
+                  <td><AnimatedNumber value={vendor.quotes} /></td>
                   <td>
                     <span className={`badge ${
                       vendor.conversionRate >= 70 ? 'bg-emerald-50 text-emerald-700' :
@@ -338,7 +361,7 @@ const DashboardPage: React.FC = () => {
         {lowStockAlerts.length === 0 ? (
           <p className="text-sm text-text-secondary">Nenhum alerta de estoque baixo.</p>
         ) : (
-          <div className="grid gap-3 md:grid-cols-2">
+          <div className="stagger-children grid gap-3 md:grid-cols-2">
             {lowStockAlerts.map((alert) => (
               <div key={alert.productName} className="flex items-start justify-between rounded-xl border border-amber-100 bg-amber-50/70 p-4">
                 <div>

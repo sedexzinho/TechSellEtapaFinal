@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import { Outlet } from 'react-router-dom';
 import Sidebar from './Sidebar';
 import Header from './Header';
+import PageTransition from '../ui/PageTransition';
 
 const Layout = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -32,7 +32,7 @@ const Layout = () => {
         <>
           {isMobile && (
             <div
-              className="fixed inset-0 z-30 bg-slate-900/40 backdrop-blur-[2px]"
+              className="menu-overlay fixed inset-0 z-30 bg-slate-900/40 backdrop-blur-[2px]"
               onClick={() => setIsMobileMenuOpen(false)}
             />
           )}
@@ -51,11 +51,11 @@ const Layout = () => {
         </>
       )}
 
-      <div className={`flex min-h-screen flex-col transition-all duration-200 ${isMobile ? '' : sidebarCollapsed ? 'ml-[76px]' : 'ml-64'}`}>
+      <div className={`flex min-h-screen flex-col transition-[margin] duration-300 ease-premium ${isMobile ? '' : sidebarCollapsed ? 'ml-[76px]' : 'ml-64'}`}>
         <Header isMobile={isMobile} onToggleMobileMenu={() => setIsMobileMenuOpen((value) => !value)} />
         <main className="flex-1 overflow-y-auto px-4 py-6 lg:px-10 lg:py-8">
           <div className="mx-auto w-full max-w-[1680px]">
-            <Outlet />
+            <PageTransition />
           </div>
         </main>
       </div>

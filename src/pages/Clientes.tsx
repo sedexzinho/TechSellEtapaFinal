@@ -239,8 +239,8 @@ const ClientesPage: React.FC = () => {
 
       {/* Modal de Adicionar/Editar Cliente */}
       {showAddModal || showEditModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-navy-surface rounded-xl p-6 w-full max-w-md">
+        <div className="modal-backdrop">
+          <div className="modal-panel bg-navy-surface rounded-xl p-6 w-full max-w-md">
             <h2 className="mb-4 text-xl font-semibold text-text-primary">
               {showAddModal ? 'Novo Cliente' : 'Editar Cliente'}
             </h2>
