@@ -125,7 +125,7 @@ const NewOrderModal: React.FC<NewOrderModalProps> = ({
 
   return (
     <div className="modal-backdrop">
-      <div className="modal-panel modal-form-panel bg-navy-surface rounded-xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex">
+      <div className="modal-panel modal-form-panel relative bg-navy-surface rounded-xl w-full max-w-4xl max-h-[calc(100vh-3rem)] overflow-hidden flex">
         {/* Sidebar - Customer selection and product search */}
         <div className="w-64 border-r border-navy-border flex flex-col">
           <div className="border-b border-navy-border p-5">
@@ -162,7 +162,7 @@ const NewOrderModal: React.FC<NewOrderModalProps> = ({
                 <div
                   role="listbox"
                   aria-label="Clientes disponíveis"
-                  className="customer-select-menu absolute left-0 right-0 z-30 mt-2 max-h-56 overflow-y-auto rounded-xl border border-navy-border bg-navy-card p-1 shadow-elevated"
+                  className="customer-select-menu absolute left-0 right-0 top-full z-30 mt-2 max-h-56 overflow-y-auto rounded-xl border border-navy-border bg-navy-card p-1 shadow-elevated"
                 >
                   <button
                     type="button"
