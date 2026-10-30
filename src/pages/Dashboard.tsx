@@ -212,11 +212,18 @@ const DashboardPage: React.FC = () => {
 
   return (
     <div className="page-shell">
-      <div>
-        <h1 className="page-title">Painel operacional</h1>
-        <p className="page-subtitle">
-          Última atualização: {new Date().toLocaleString('pt-BR')}
-        </p>
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <p className="mb-2 text-xs font-semibold uppercase tracking-[0.16em] text-teal-700">Resumo do mês</p>
+          <h1 className="page-title">Painel operacional</h1>
+          <p className="page-subtitle">
+            Última atualização: {new Date().toLocaleString('pt-BR')}
+          </p>
+        </div>
+        <div className="inline-flex w-fit items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-2 text-xs font-semibold text-emerald-700">
+          <span className="size-2 rounded-full bg-emerald-500" aria-hidden="true" />
+          Operação saudável
+        </div>
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-6">

@@ -68,7 +68,7 @@ const Sidebar = ({ isMobile, collapsed, onToggleCollapse, onNavigate }: SidebarP
                 'group flex items-center rounded-xl px-3 py-2.5 text-sm font-medium transition-colors duration-150',
                 collapsed ? 'justify-center' : '',
                 isActive
-                  ? 'bg-white/10 text-white shadow-sm'
+                  ? 'bg-teal-400/15 text-white shadow-sm ring-1 ring-inset ring-teal-300/20'
                   : 'text-slate-300 hover:bg-white/5 hover:text-white'
               )
             }
