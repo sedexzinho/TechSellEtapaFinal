@@ -24,6 +24,11 @@ export default [
         HTMLInputElement: 'readonly',
         HTMLSelectElement: 'readonly',
         HTMLElement: 'readonly',
+        HTMLDivElement: 'readonly',
+        MouseEvent: 'readonly',
+        Node: 'readonly',
+        requestAnimationFrame: 'readonly',
+        cancelAnimationFrame: 'readonly',
       },
     },
     rules: {
