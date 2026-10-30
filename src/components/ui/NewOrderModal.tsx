@@ -127,8 +127,10 @@ const NewOrderModal: React.FC<NewOrderModalProps> = ({
       <div className="modal-panel modal-form-panel bg-navy-surface rounded-xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex">
         {/* Sidebar - Customer selection and product search */}
         <div className="w-64 border-r border-navy-border flex flex-col">
-          <div className="p-4">
-            <h2 className="text-xl font-bold text-text-primary">Novo Pedido</h2>
+          <div className="border-b border-navy-border p-5">
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-cyan-accent">Venda</p>
+            <h2 className="mt-1 text-xl font-bold text-text-primary">Novo Pedido</h2>
+            <p className="mt-1 text-sm text-text-primary/60">Selecione o cliente e monte o pedido.</p>
           </div>
           
           {/* Customer selection */}
@@ -193,14 +195,22 @@ const NewOrderModal: React.FC<NewOrderModalProps> = ({
         </div>
         
         {/* Main content - Order summary */}
-        <div className="flex-1 p-6 overflow-y-auto">
+        <div className="flex-1 overflow-y-auto p-6">
+          <div className="mb-6 flex items-start justify-between gap-4 border-b border-navy-border pb-5">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-text-primary/50">Resumo</p>
+              <h3 className="mt-1 text-2xl font-bold text-text-primary">Itens do pedido</h3>
+            </div>
+            <span className="rounded-full border border-cyan-accent/20 bg-cyan-accent/10 px-3 py-1 text-xs font-semibold text-cyan-accent">
+              {selectedProducts.length} {selectedProducts.length === 1 ? 'item' : 'itens'}
+            </span>
+          </div>
           {/* Order items list */}
           {selectedProducts.length > 0 ? (
             <div className="mb-6">
-              <h3 className="text-lg font-bold text-text-primary mb-4">Itens do Pedido</h3>
               <div className="space-y-3">
                 {selectedProducts.map(item => (
-                  <div key={item.id} className="bg-navy-surface rounded-lg p-4 flex justify-between items-center">
+                  <div key={item.id} className="order-item-card bg-navy-card rounded-xl border border-navy-border p-4 flex justify-between items-center gap-4">
                     <div>
                       <p className="font-medium text-text-primary">{item.nome}</p>
                       <p className="text-text-primary/70 text-sm">
@@ -248,7 +258,7 @@ const NewOrderModal: React.FC<NewOrderModalProps> = ({
           )}
           
           {/* Order total */}
-          <div className="mt-8 pt-6 border-t border-navy-border">
+          <div className="order-total-panel mt-8 rounded-xl border border-navy-border bg-navy-card p-5">
             <div className="flex justify-between items-center mb-4">
               <p className="text-lg font-medium text-text-primary">Total do Pedido:</p>
               <p className="text-2xl font-bold text-blue-primary">R$ {total.toFixed(2)}</p>
@@ -259,7 +269,7 @@ const NewOrderModal: React.FC<NewOrderModalProps> = ({
             )}
             
             {/* Action buttons */}
-            <div className="flex justify-end space-x-3">
+            <div className="flex justify-end gap-3">
               <button
                 onClick={onClose}
                 disabled={isLoading}

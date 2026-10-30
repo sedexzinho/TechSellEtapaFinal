@@ -565,6 +565,8 @@ div.fixed.inset-0 > div[class*="bg-navy-surface"].flex {
 
   .modal-form-panel,
   .modal-form-card {
+    width: min(100%, calc(100vw - 2rem));
+    max-width: calc(100vw - 2rem);
     max-height: calc(100vh - 2rem);
     border-radius: 1rem;
   }
@@ -584,6 +586,20 @@ div.fixed.inset-0 > div[class*="bg-navy-surface"].flex {
   .modal-form-panel > :last-child {
     min-height: 0;
     padding: 1.25rem;
+  }
+
+  .order-item-card {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .order-item-card > :last-child {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .order-total-panel {
+    margin-top: 1.25rem;
   }
 
   .modal-form-panel button,
