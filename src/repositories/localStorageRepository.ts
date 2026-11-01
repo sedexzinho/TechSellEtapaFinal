@@ -4,8 +4,6 @@ export abstract class LocalStorageRepository<T, ID extends string | number> impl
   protected abstract readonly key: string;
   protected abstract deserialize(data: string): T;
   protected abstract serialize(entity: T): string;
-  protected abstract getId(entity: T): ID;
-
   protected getStorageKey(): string {
     return `techsell:${this.key}`;
   }
@@ -48,10 +46,13 @@ export abstract class LocalStorageRepository<T, ID extends string | number> impl
     return this.getData();
   }
 
-  create(entity: T): T {
+  create(entity: T): T;
+  create(entity: Omit<T, 'id'>): T;
+  create(entity: T | Omit<T, 'id'>): T {
     const data = this.getData();
+    const typedEntity = entity as T;
     
-    const entityId = this.getId(entity);
+    const entityId = this.getId(typedEntity);
     if (!entityId || entityId === 0 || entityId === '0') {
       const newEntity = { ...entity } as T;
       const newId = this.generateId();
@@ -61,9 +62,9 @@ export abstract class LocalStorageRepository<T, ID extends string | number> impl
       return newEntity;
     }
     
-    data.push(entity);
+    data.push(typedEntity);
     this.saveData(data);
-    return entity;
+    return typedEntity;
   }
 
   update(id: ID, entity: Partial<T>): T | null {
