@@ -71,17 +71,23 @@ const ClientesPage: React.FC = () => {
     setSelectedType(e.target.value as '' | 'FISICA' | 'JURIDICA');
   };
 
+  const canCreateCustomer = user?.perfil === 'ADMIN' || user?.perfil === 'VENDEDOR';
+  const isAdmin = user?.perfil === 'ADMIN';
+
   const handleAddCustomer = () => {
+    if (!canCreateCustomer) return;
     setEditCustomer(null);
     setShowAddModal(true);
   };
 
   const handleEditCustomer = (customer: Customer) => {
+    if (!isAdmin) return;
     setEditCustomer(customer);
     setShowEditModal(true);
   };
 
   const handleDeleteCustomer = async (id: number) => {
+    if (!isAdmin) return;
     if (window.confirm('Tem certeza que deseja excluir este cliente?')) {
       try {
         customerRepository.delete(id);
@@ -99,6 +105,7 @@ const ClientesPage: React.FC = () => {
   };
 
   const handleSaveCustomer = async (customerData: Omit<Customer, 'id'>) => {
+    if (!canCreateCustomer || (editCustomer && !isAdmin)) return;
     try {
       if (editCustomer) {
         // Updating existing customer
@@ -142,9 +149,9 @@ const ClientesPage: React.FC = () => {
       <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <h1 className="page-title">Clientes</h1>
-          <p className="page-subtitle">Base comercial de pessoas físicas e jurídicas.</p>
+          <p className="page-subtitle">Cadastre e consulte clientes da operação comercial.</p>
         </div>
-        {user?.perfil === 'ADMIN' && (
+        {canCreateCustomer && (
           <button
             onClick={handleAddCustomer}
             className="btn-primary"
@@ -220,7 +227,7 @@ const ClientesPage: React.FC = () => {
                   <td>{customer.cidade} - {customer.estado}</td>
                   <td>
                     <div className="flex flex-wrap gap-2">
-                      {user?.perfil === 'ADMIN' && (
+                      {isAdmin && (
                         <>
                           <button onClick={() => handleEditCustomer(customer)} className="btn-sm btn-outline">Editar</button>
                           <button onClick={() => handleDeleteCustomer(customer.id)} className="btn-sm border border-red-200 text-red-700 hover:bg-red-50">Excluir</button>

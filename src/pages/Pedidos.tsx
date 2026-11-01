@@ -38,11 +38,16 @@ const PedidosPage: React.FC = () => {
     }
   };
 
+  const canCreateOrder = user?.perfil === 'ADMIN' || user?.perfil === 'VENDEDOR';
+  const isAdmin = user?.perfil === 'ADMIN';
+
   const handleNewOrder = () => {
+    if (!canCreateOrder) return;
     setShowNewOrderModal(true);
   };
 
   const handleConfirmOrder = async (order: Order) => {
+    if (!isAdmin) return;
     if (window.confirm('Tem certeza que deseja confirmar este pedido?')) {
       try {
         // Validate stock before confirming
@@ -71,6 +76,7 @@ const PedidosPage: React.FC = () => {
   };
 
   const handleCancelOrder = async (order: Order) => {
+    if (!isAdmin) return;
     if (window.confirm(`Tem certeza que deseja ${order.status === 'confirmado' ? 'cancelar' : 'restaurar'} este pedido?`)) {
       try {
         let updatedOrder: Order;
@@ -105,6 +111,7 @@ const PedidosPage: React.FC = () => {
   };
 
   const handleDeleteOrder = async (id: number) => {
+    if (!isAdmin) return;
     if (window.confirm('Tem certeza que deseja excluir este pedido?')) {
       try {
         orderRepository.delete(id);
@@ -117,6 +124,7 @@ const PedidosPage: React.FC = () => {
   };
 
   const handleSaveNewOrder = async (orderData: Omit<Order, 'id' | 'status'>) => {
+    if (!canCreateOrder) return;
     try {
       // Validate stock before saving
       for (const item of orderData.items) {
@@ -178,9 +186,9 @@ const PedidosPage: React.FC = () => {
         <div>
           <span className="eyebrow">Operação comercial</span>
           <h1 className="page-title">Pedidos</h1>
-          <p className="page-subtitle">Acompanhe o ciclo completo dos pedidos da sua operação.</p>
+          <p className="page-subtitle">Crie e acompanhe pedidos; ações administrativas ficam restritas ao administrador.</p>
         </div>
-        {user?.perfil === 'ADMIN' && (
+        {canCreateOrder && (
           <button
             onClick={handleNewOrder}
             className="btn-primary orders-primary-action"
@@ -247,7 +255,7 @@ const PedidosPage: React.FC = () => {
                   <td className="font-semibold">R$ {order.total.toFixed(2)}</td>
                   <td>
                     <div className="flex flex-wrap gap-2">
-                      {user?.perfil === 'ADMIN' && (
+                      {isAdmin && (
                         <>
                           {order.status === 'rascunho' && (
                             <>
