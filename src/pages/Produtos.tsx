@@ -64,8 +64,7 @@ const ProdutosPage = () => {
   const handleAddProduct = async (productData: Product) => {
     // Assign a proper ID (in a real app, this would come from the backend)
     const newProduct = {
-      ...productData,
-      id: Date.now() // Temporary ID
+      ...productData
     };
     productRepository.create(newProduct);
     loadProducts();

@@ -35,7 +35,7 @@ const LoginPage = () => {
           </div>
           <p className="text-sm font-medium uppercase tracking-[0.2em] text-teal-300">TechSell</p>
           <h1 className="mt-4 max-w-md text-4xl font-semibold leading-tight tracking-tight">
-            Gestão comercial para marmorarias, com clareza e controle.
+            Gestão comercial para VKmarmores, com clareza e controle.
           </h1>
           <p className="mt-4 max-w-md text-sm leading-6 text-slate-300">
             Pedidos, estoque, visitas, orçamentos e desempenho em um único ambiente profissional.

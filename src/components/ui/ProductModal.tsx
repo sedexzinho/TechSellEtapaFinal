@@ -9,8 +9,8 @@ interface ProductModalProps {
 }
 
 const ProductModal = ({ isOpen, onClose, onSave, initialData }: ProductModalProps) => {
-  const [formData, setFormData] = useState<Product>({
-    id: initialData?.id || Date.now(), // Temporary ID for new products
+const [formData, setFormData] = useState<Product>({
+    id: initialData?.id || 0,
     nome: initialData?.nome || '',
     descricao: initialData?.descricao || '',
     preco: initialData?.preco || 0,

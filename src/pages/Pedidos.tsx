@@ -134,7 +134,6 @@ const PedidosPage: React.FC = () => {
       
       const newOrder = {
         ...orderData,
-        id: Date.now(), // Temporary ID
         status: 'rascunho' as const
       };
       

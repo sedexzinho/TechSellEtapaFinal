@@ -27,6 +27,7 @@ const BudgetModal: React.FC<BudgetModalProps> = ({
   const [visitId, setVisitId] = useState<number | null>(null);
   const [status, setStatus] = useState<'rascunho' | 'aprovado' | 'executado' | 'cancelado'>('rascunho');
   const [budgetItems, setBudgetItems] = useState<Array<BudgetItem & { id: number }>>([]);
+  const [nextItemId, setNextItemId] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isCustomerOpen, setIsCustomerOpen] = useState(false);
@@ -43,8 +44,8 @@ const BudgetModal: React.FC<BudgetModalProps> = ({
     if (budget) {
       setCustomerId(budget.customerId);
       setDate(budget.date);
-      setVisitId(budget.visitId ?? null);
-      setStatus(budget.status);
+      const maxId = budgetItems.reduce((max, item) => Math.max(max, item.id || 0), 0);
+      setNextItemId(maxId + 1);
       setBudgetItems(budget.items.map((item, index) => ({ ...item, id: index + 1000 })));
     } else {
       setDate(new Date().toISOString().split('T')[0]);
@@ -77,15 +78,18 @@ const BudgetModal: React.FC<BudgetModalProps> = ({
         )
       );
     } else {
-      // Add new item
-      setBudgetItems(prev => [...prev, {
-        productId: product.id,
-        productName: product.nome,
-        productPrice: product.preco,
-        quantity: 1,
-        subtotal: product.preco,
-        id: Date.now() + Math.random()
-      }]);
+      setBudgetItems(prev => {
+        const newId = nextItemId;
+        setNextItemId(nextItemId + 1);
+        return [...prev, {
+          id: newId,
+          productId: product.id,
+          productName: product.nome,
+          productPrice: product.preco,
+          quantity: 1,
+          subtotal: product.preco
+        }];
+      });
     }
   };
 

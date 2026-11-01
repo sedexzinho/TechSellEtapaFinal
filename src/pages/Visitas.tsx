@@ -96,7 +96,7 @@ const VisitasPage: React.FC = () => {
   const handleVisitSubmit = (visitData: Omit<Visit, 'id'>) => {
     try {
       if (modalAction === 'create' && selectedVisit === null) {
-        visitRepository.create({ ...visitData, id: Date.now() });
+        visitRepository.create(visitData);
       } else if (modalAction === 'edit' && selectedVisit !== null) {
         visitRepository.update(selectedVisit.id, { ...selectedVisit, ...visitData });
       }
@@ -178,7 +178,7 @@ const VisitasPage: React.FC = () => {
   const handleBudgetSubmit = (budgetData: Omit<Budget, 'id'>) => {
     try {
       if (modalAction === 'create' && selectedBudget === null) {
-        budgetRepository.create({ ...budgetData, id: Date.now() });
+        budgetRepository.create(budgetData);
       } else if (modalAction === 'edit' && selectedBudget !== null) {
         budgetRepository.update(selectedBudget.id, { ...selectedBudget, ...budgetData });
       }

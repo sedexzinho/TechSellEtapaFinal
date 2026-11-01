@@ -89,8 +89,7 @@ const MetasPage: FC = () => {
         goalRepository.update(editGoal.id, updatedGoal);
       } else {
         const newGoal = {
-          ...goalData,
-          id: Date.now()
+          ...goalData
         };
         goalRepository.create(newGoal);
       }
@@ -131,8 +130,7 @@ const MetasPage: FC = () => {
         costRepository.update(editCost.id, updatedCost);
       } else {
         const newCost = {
-          ...costData,
-          id: Date.now()
+          ...costData
         };
         costRepository.create(newCost);
       }

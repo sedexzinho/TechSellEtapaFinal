@@ -20,6 +20,7 @@ export interface Budget {
 }
 
 export interface BudgetItem {
+  id?: number;
   productId: number;
   productName: string;
   productPrice: number;

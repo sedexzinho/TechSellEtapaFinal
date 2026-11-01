@@ -4,6 +4,7 @@ export abstract class LocalStorageRepository<T, ID extends string | number> impl
   protected abstract readonly key: string;
   protected abstract deserialize(data: string): T;
   protected abstract serialize(entity: T): string;
+  protected abstract getId(entity: T): ID;
 
   protected getStorageKey(): string {
     return `techsell:${this.key}`;
@@ -30,6 +31,14 @@ export abstract class LocalStorageRepository<T, ID extends string | number> impl
     }
   }
 
+  protected generateId(): ID {
+    const data = this.getData();
+    if (data.length === 0) return 1 as ID;
+    
+    const maxId = Math.max(...data.map(item => Number(this.getId(item))));
+    return (maxId + 1) as ID;
+  }
+
   findById(id: ID): T | null {
     const data = this.getData();
     return data.find(item => this.getId(item) === id) || null;
@@ -41,6 +50,17 @@ export abstract class LocalStorageRepository<T, ID extends string | number> impl
 
   create(entity: T): T {
     const data = this.getData();
+    
+    const entityId = this.getId(entity);
+    if (!entityId || entityId === 0 || entityId === '0') {
+      const newEntity = { ...entity } as T;
+      const newId = this.generateId();
+      (newEntity as any).id = newId;
+      data.push(newEntity);
+      this.saveData(data);
+      return newEntity;
+    }
+    
     data.push(entity);
     this.saveData(data);
     return entity;

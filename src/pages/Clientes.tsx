@@ -107,8 +107,7 @@ const ClientesPage: React.FC = () => {
       } else {
         // Adding new customer
         const newCustomer = {
-          ...customerData,
-          id: Date.now() // Temporary ID
+          ...customerData
         };
         customerRepository.create(newCustomer);
       }
