@@ -91,7 +91,7 @@ const Sidebar = ({ isMobile, collapsed, onToggleCollapse, onNavigate }: SidebarP
       <div className={cn('flex h-16 items-center border-b border-white/5', collapsed ? 'justify-center px-2' : 'px-4')}>
         {!collapsed ? (
           <>
-            <div className="flex h-10 w-[76px] shrink-0 items-center justify-center overflow-hidden rounded-lg bg-white px-1.5">
+            <div className="flex h-12 w-24 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-white px-1.5">
               <img
                 src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-XhgEoUrI2fbb4IIGG8SR0Ahwlmgvmm.png"
                 alt="VK Mármores — Soluções que constroem"
