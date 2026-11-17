@@ -12,6 +12,7 @@ import {
   Activity,
   ChevronsLeft,
   ChevronsRight,
+  Gem,
 } from 'lucide-react';
 import { useAuthStore } from '../../store/authStore';
 import { cn } from '../ui/utils';
