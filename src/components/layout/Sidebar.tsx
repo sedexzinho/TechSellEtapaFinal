@@ -12,7 +12,6 @@ import {
   Activity,
   ChevronsLeft,
   ChevronsRight,
-  Gem,
 } from 'lucide-react';
 import { useAuthStore } from '../../store/authStore';
 import { cn } from '../ui/utils';
@@ -90,13 +89,27 @@ const Sidebar = ({ isMobile, collapsed, onToggleCollapse, onNavigate }: SidebarP
       )}
     >
       <div className={cn('flex h-16 items-center border-b border-white/5', collapsed ? 'justify-center px-2' : 'px-4')}>
-        <div className="icon-lift flex h-9 w-9 items-center justify-center rounded-xl bg-teal-500/15 text-teal-300">
-          <Gem className="h-4 w-4" />
-        </div>
-        {!collapsed && (
-          <div className="ml-3 min-w-0">
-            <p className="truncate text-sm font-semibold tracking-tight">TechSell</p>
-            <p className="truncate text-[1px] text-sidebar-muted">VK marmore gestão</p>
+        {!collapsed ? (
+          <>
+            <div className="flex h-10 w-[76px] shrink-0 items-center justify-center overflow-hidden rounded-lg bg-white px-1.5">
+              <img
+                src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-XhgEoUrI2fbb4IIGG8SR0Ahwlmgvmm.png"
+                alt="VK Mármores — Soluções que constroem"
+                className="h-full w-full object-contain"
+              />
+            </div>
+            <div className="ml-3 min-w-0">
+              <p className="truncate text-sm font-semibold tracking-tight">TechSell</p>
+              <p className="truncate text-xs text-sidebar-muted">VK mármore gestão</p>
+            </div>
+          </>
+        ) : (
+          <div className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-lg bg-white p-0.5">
+            <img
+              src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-XhgEoUrI2fbb4IIGG8SR0Ahwlmgvmm.png"
+              alt="VK Mármores"
+              className="h-full w-full object-contain"
+            />
           </div>
         )}
       </div>
