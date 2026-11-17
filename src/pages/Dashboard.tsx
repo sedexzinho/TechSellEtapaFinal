@@ -8,6 +8,10 @@ import { AlertTriangle, ClipboardList, FileSpreadsheet, TrendingUp, Truck, Walle
 import { Area, AreaChart, Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import AnimatedNumber from '../components/ui/AnimatedNumber';
 import { usePrefersReducedMotion } from '../hooks/usePrefersReducedMotion';
+import { useAuthStore } from '../store/authStore';
+import AISummaryCard from '../components/ui/AISummaryCard';
+import { computeSalesSnapshot, toLocalDay } from '../services/aiService';
+import type { SalesSnapshot, SummaryResult } from '../services/aiService';
 
 const DashboardPage: React.FC = () => {
   const [stats, setStats] = useState({
@@ -40,6 +44,9 @@ const DashboardPage: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const prefersReducedMotion = usePrefersReducedMotion();
+  const { user } = useAuthStore();
+  const [salesSnapshot, setSalesSnapshot] = useState<SalesSnapshot | null>(null);
+  const [aiSummary, setAiSummary] = useState<SummaryResult | null>(null);
 
   const orderRepository = new OrderRepository();
   const productRepository = new ProductRepository();
@@ -162,6 +169,15 @@ const DashboardPage: React.FC = () => {
           minStock: product.estoqueMinimo
         }));
       
+      setSalesSnapshot(
+        computeSalesSnapshot(
+          orders,
+          products,
+          toLocalDay(new Date(currentYear, currentMonth - 1, 1)),
+          toLocalDay(now)
+        )
+      );
+
       setStats({
         monthlyRevenue,
         monthlyOrders: monthlyOrders.length,
@@ -250,6 +266,16 @@ const DashboardPage: React.FC = () => {
           </div>
         ))}
       </div>
+
+      {user?.perfil === 'ADMIN' && (
+        <AISummaryCard
+          title="Resumo do mês"
+          description="Vendas confirmadas do dia 1 até hoje, comparadas ao período anterior de mesma duração."
+          snapshot={salesSnapshot}
+          summary={aiSummary}
+          onSummaryChange={setAiSummary}
+        />
+      )}
 
       <div className="stagger-children grid gap-6 xl:grid-cols-2">
         <div className="surface-card p-5">
