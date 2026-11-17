@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../store/authStore';
 import Button from '../components/ui/Button';
-import { Eye, EyeOff, Gem, Lock, User } from 'lucide-react';
+import { Eye, EyeOff, Lock, User } from 'lucide-react';
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -30,8 +30,12 @@ const LoginPage = () => {
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(20,184,166,0.18),_transparent_32%),radial-gradient(circle_at_bottom_right,_rgba(14,165,233,0.12),_transparent_28%)]" />
       <div className="relative mx-auto grid min-h-screen max-w-6xl items-center gap-10 px-6 py-10 lg:grid-cols-2">
         <div className="login-copy hidden lg:block">
-          <div className="mb-8 flex h-12 w-12 items-center justify-center rounded-2xl bg-teal-400/15 text-teal-300">
-            <Gem className="h-6 w-6" />
+          <div className="mb-5 flex h-[116px] w-[220px] items-center justify-center overflow-hidden rounded-xl bg-white p-2">
+            <img
+              src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-XhgEoUrI2fbb4IIGG8SR0Ahwlmgvmm.png"
+              alt="VK Mármores — Soluções que constroem"
+              className="h-full w-full object-contain"
+            />
           </div>
           <p className="text-sm font-medium uppercase tracking-[0.2em] text-teal-300">TechSell</p>
           <h1 className="mt-4 max-w-md text-4xl font-semibold leading-tight tracking-tight">
@@ -44,8 +48,12 @@ const LoginPage = () => {
 
         <div className="login-card w-full max-w-md justify-self-center rounded-3xl border border-white/10 bg-[#111A2D] p-8 text-white shadow-elevated">
           <div className="mb-8 text-center">
-            <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-teal-700 text-white lg:hidden">
-              <Gem className="h-5 w-5" />
+            <div className="mx-auto mb-4 flex h-[60px] w-[112px] items-center justify-center overflow-hidden rounded-lg bg-white p-1 lg:hidden">
+              <img
+                src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-XhgEoUrI2fbb4IIGG8SR0Ahwlmgvmm.png"
+                alt="VK Mármores — Soluções que constroem"
+                className="h-full w-full object-contain"
+              />
             </div>
             <h2 className="text-2xl font-semibold tracking-tight">Entrar no TechSell</h2>
             <p className="mt-1 text-sm text-text-secondary">Use suas credenciais para acessar o sistema</p>

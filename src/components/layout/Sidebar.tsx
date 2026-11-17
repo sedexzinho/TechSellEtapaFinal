@@ -12,7 +12,6 @@ import {
   Activity,
   ChevronsLeft,
   ChevronsRight,
-  Gem,
 } from 'lucide-react';
 import { useAuthStore } from '../../store/authStore';
 import { cn } from '../ui/utils';
@@ -96,7 +95,7 @@ const Sidebar = ({ isMobile, collapsed, onToggleCollapse, onNavigate }: SidebarP
         {!collapsed && (
           <div className="ml-3 min-w-0">
             <p className="truncate text-sm font-semibold tracking-tight">TechSell</p>
-            <p className="truncate text-[14px] text-sidebar-muted">VK marmore gestão</p>
+            <p className="truncate text-[1px] text-sidebar-muted">VK marmore gestão</p>
           </div>
         )}
       </div>
