@@ -44,7 +44,12 @@ export class SeedService {
     // Check if users already exist
     const existingUsers = this.userRepository.findAll();
     if (existingUsers.length > 0) {
-      console.log('Users already seeded, skipping...');
+      users.forEach(seedUser => {
+        const existingUser = this.userRepository.findByLogin(seedUser.login);
+        if (existingUser && existingUser.nome !== seedUser.nome) {
+          this.userRepository.update(existingUser.id, { nome: seedUser.nome });
+        }
+      });
       return;
     }
 
@@ -149,7 +154,13 @@ export class SeedService {
     // Check if goals already exist
     const existingGoals = this.goalRepository.findAll();
     if (existingGoals.length > 0) {
-      console.log('Goals already seeded, skipping...');
+      const userNames = new Map(users.map(user => [user.id, user.nome]));
+      existingGoals.forEach(goal => {
+        const userName = userNames.get(goal.userId);
+        if (userName && goal.userName !== userName) {
+          this.goalRepository.update(goal.id, { userName });
+        }
+      });
       return;
     }
 

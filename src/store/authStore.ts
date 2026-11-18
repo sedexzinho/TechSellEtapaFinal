@@ -72,12 +72,12 @@ export const useAuthStore = create<AuthState>((set) => ({
           set({ isAuthenticated: true, user: userWithoutPassword });
         } else {
           // Fallback if no admin found
-          set({ isAuthenticated: true, user: { id: 1, nome: 'Carlos Mendes', login: 'admin', perfil: 'ADMIN', ativo: true } });
+          set({ isAuthenticated: true, user: { id: 1, nome: 'Rafaela Ferrari', login: 'admin', perfil: 'ADMIN', ativo: true } });
         }
       } catch (error) {
         console.error('Error initializing auth state:', error);
         // Fallback in case of error
-        set({ isAuthenticated: true, user: { id: 1, nome: 'Carlos Mendes', login: 'admin', perfil: 'ADMIN', ativo: true } });
+        set({ isAuthenticated: true, user: { id: 1, nome: 'Rafaela Ferrari', login: 'admin', perfil: 'ADMIN', ativo: true } });
       }
     }
   }

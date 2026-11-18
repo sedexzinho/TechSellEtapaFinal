@@ -134,9 +134,9 @@ const DashboardPage: React.FC = () => {
       );
       
       const allVendors = [
-        { id: 2, name: 'Ricardo Silva' },
-        { id: 3, name: 'Fernanda Lima' },
-        { id: 4, name: 'Paulo Oliveira' }
+        { id: 2, name: 'Davi Silva' },
+        { id: 3, name: 'Davi Barbosa' },
+        { id: 4, name: 'Vinicius Kauan' }
       ];
       
       allVendors.forEach(vendor => {

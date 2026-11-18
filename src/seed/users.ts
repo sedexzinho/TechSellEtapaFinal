@@ -10,7 +10,7 @@ export interface UserSeed {
 export const users: UserSeed[] = [
   {
     id: 1,
-    nome: 'Carlos Mendes',
+    nome: 'Rafaela Ferrari',
     login: 'admin',
     senha: 'admin123',
     perfil: 'ADMIN',
@@ -18,7 +18,7 @@ export const users: UserSeed[] = [
   },
   {
     id: 2,
-    nome: 'Ricardo Silva',
+    nome: 'Davi Silva',
     login: 'ricardo',
     senha: '123456',
     perfil: 'VENDEDOR',
@@ -26,7 +26,7 @@ export const users: UserSeed[] = [
   },
   {
     id: 3,
-    nome: 'Fernanda Lima',
+    nome: 'Davi Barbosa',
     login: 'fernanda',
     senha: '123456',
     perfil: 'VENDEDOR',
@@ -34,7 +34,7 @@ export const users: UserSeed[] = [
   },
   {
     id: 4,
-    nome: 'Paulo Oliveira',
+    nome: 'Vinicius Kauan',
     login: 'paulo',
     senha: '123456',
     perfil: 'VENDEDOR',
