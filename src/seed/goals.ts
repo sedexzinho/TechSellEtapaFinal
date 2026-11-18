@@ -11,8 +11,8 @@ export interface GoalSeed {
 export const goals: GoalSeed[] = [
   {
     id: 1,
-    userId: 2, // Ricardo Silva (VENDEDOR)
-    userName: 'Ricardo Silva',
+    userId: 2, // Davi Silva (VENDEDOR)
+    userName: 'Davi Silva',
     month: 10, // Outubro
     year: 2025,
     targetValue: 50000,
@@ -20,8 +20,8 @@ export const goals: GoalSeed[] = [
   },
   {
     id: 2,
-    userId: 3, // Fernanda Lima (VENDEDOR)
-    userName: 'Fernanda Lima',
+    userId: 3, // Davi Barbosa (VENDEDOR)
+    userName: 'Davi Barbosa',
     month: 10, // Outubro
     year: 2025,
     targetValue: 45000,
@@ -29,8 +29,8 @@ export const goals: GoalSeed[] = [
   },
   {
     id: 3,
-    userId: 4, // Paulo Oliveira (VENDEDOR)
-    userName: 'Paulo Oliveira',
+    userId: 4, // Vinicius Kauan (VENDEDOR)
+    userName: 'Vinicius Kauan',
     month: 10, // Outubro
     year: 2025,
     targetValue: 40000,
@@ -38,8 +38,8 @@ export const goals: GoalSeed[] = [
   },
   {
     id: 4,
-    userId: 1, // Carlos Mendes (ADMIN)
-    userName: 'Carlos Mendes',
+    userId: 1, // Rafaela Ferrari (ADMIN)
+    userName: 'Rafaela Ferrari',
     month: 10, // Outubro
     year: 2025,
     targetValue: 100000,

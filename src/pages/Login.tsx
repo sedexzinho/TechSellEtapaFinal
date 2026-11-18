@@ -32,7 +32,7 @@ const LoginPage = () => {
         <div className="login-copy hidden lg:block">
           <div className="mb-5 flex h-[116px] w-[220px] items-center justify-center overflow-hidden rounded-xl bg-white p-2">
             <img
-              src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-XhgEoUrI2fbb4IIGG8SR0Ahwlmgvmm.png"
+              src="/logo-vk.png"
               alt="VK Mármores — Soluções que constroem"
               className="h-full w-full object-contain"
             />
@@ -50,7 +50,7 @@ const LoginPage = () => {
           <div className="mb-8 text-center">
             <div className="mx-auto mb-4 flex h-[60px] w-[112px] items-center justify-center overflow-hidden rounded-lg bg-white p-1 lg:hidden">
               <img
-                src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-XhgEoUrI2fbb4IIGG8SR0Ahwlmgvmm.png"
+                src="/logo-vk.png"
                 alt="VK Mármores — Soluções que constroem"
                 className="h-full w-full object-contain"
               />
@@ -102,10 +102,10 @@ const LoginPage = () => {
 
           <div className="mt-6 rounded-2xl bg-slate-50 p-4 text-xs leading-5 text-text-secondary">
             <p className="mb-1 font-semibold text-slate-700">Usuários de teste</p>
-            <p>admin / admin123 (ADMIN)</p>
-            <p>ricardo / 123456 (VENDEDOR)</p>
-            <p>fernanda / 123456 (VENDEDOR)</p>
-            <p>paulo / 123456 (VENDEDOR)</p>
+            <p>Rafaela Ferrari — rafaela.ferrari / admin123</p>
+            <p>Davi Silva — davi.silva / 123456</p>
+            <p>Davi Barbosa — davi.barbosa / 123456</p>
+            <p>Vinicius Kauan — vinicius.kauan / 123456</p>
           </div>
         </div>
       </div>
