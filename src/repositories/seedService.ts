@@ -44,10 +44,21 @@ export class SeedService {
     // Check if users already exist
     const existingUsers = this.userRepository.findAll();
     if (existingUsers.length > 0) {
+      const legacyLogins: Record<number, string> = {
+        1: 'admin',
+        2: 'ricardo',
+        3: 'fernanda',
+        4: 'paulo',
+      };
+
       users.forEach(seedUser => {
-        const existingUser = this.userRepository.findByLogin(seedUser.login);
-        if (existingUser && existingUser.nome !== seedUser.nome) {
-          this.userRepository.update(existingUser.id, { nome: seedUser.nome });
+        const existingUser = existingUsers.find(user => user.id === seedUser.id)
+          ?? this.userRepository.findByLogin(legacyLogins[seedUser.id] ?? seedUser.login);
+        if (existingUser && (existingUser.nome !== seedUser.nome || existingUser.login !== seedUser.login)) {
+          this.userRepository.update(existingUser.id, {
+            nome: seedUser.nome,
+            login: seedUser.login,
+          });
         }
       });
       return;

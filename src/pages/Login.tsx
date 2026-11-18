@@ -102,10 +102,10 @@ const LoginPage = () => {
 
           <div className="mt-6 rounded-2xl bg-slate-50 p-4 text-xs leading-5 text-text-secondary">
             <p className="mb-1 font-semibold text-slate-700">Usuários de teste</p>
-            <p>Rafaela Ferrari — admin / admin123</p>
-            <p>Davi Silva — ricardo / 123456</p>
-            <p>Davi Barbosa — fernanda / 123456</p>
-            <p>Vinicius Kauan — paulo / 123456</p>
+            <p>Rafaela Ferrari — rafaela.ferrari / admin123</p>
+            <p>Davi Silva — davi.silva / 123456</p>
+            <p>Davi Barbosa — davi.barbosa / 123456</p>
+            <p>Vinicius Kauan — vinicius.kauan / 123456</p>
           </div>
         </div>
       </div>

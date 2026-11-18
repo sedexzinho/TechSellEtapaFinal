@@ -11,7 +11,7 @@ export const users: UserSeed[] = [
   {
     id: 1,
     nome: 'Rafaela Ferrari',
-    login: 'admin',
+    login: 'rafaela.ferrari',
     senha: 'admin123',
     perfil: 'ADMIN',
     ativo: true
@@ -19,7 +19,7 @@ export const users: UserSeed[] = [
   {
     id: 2,
     nome: 'Davi Silva',
-    login: 'ricardo',
+    login: 'davi.silva',
     senha: '123456',
     perfil: 'VENDEDOR',
     ativo: true
@@ -27,7 +27,7 @@ export const users: UserSeed[] = [
   {
     id: 3,
     nome: 'Davi Barbosa',
-    login: 'fernanda',
+    login: 'davi.barbosa',
     senha: '123456',
     perfil: 'VENDEDOR',
     ativo: true
@@ -35,7 +35,7 @@ export const users: UserSeed[] = [
   {
     id: 4,
     nome: 'Vinicius Kauan',
-    login: 'paulo',
+    login: 'vinicius.kauan',
     senha: '123456',
     perfil: 'VENDEDOR',
     ativo: true
