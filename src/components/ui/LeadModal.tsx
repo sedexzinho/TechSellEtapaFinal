@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 import type { Lead } from '../../schemas/leadSchema';
 
 interface LeadModalProps {
@@ -68,29 +69,37 @@ const LeadModal: React.FC<LeadModalProps> = ({ isOpen, onClose, onSave, lead }) 
   };
 
   const inputClass =
-    'w-full bg-navy-border rounded px-3 py-2 text-text-primary focus:outline-none focus:ring-2 focus:ring-blue-primary';
+    'w-full rounded-xl border border-navy-border bg-navy-card px-3 py-2.5 text-sm text-text-primary placeholder:text-text-secondary focus:border-cyan-accent focus:outline-none focus:ring-2 focus:ring-cyan-accent/20';
   const labelClass = 'block text-sm font-medium text-text-primary mb-1';
 
-  return (
+  return createPortal(
     <div className="modal-backdrop">
-      <div className="modal-panel modal-form-card bg-navy-surface rounded-xl w-full max-w-md">
-        <h2 className="text-xl font-bold mb-4 text-text-primary">{lead ? 'Editar Lead' : 'Novo Lead'}</h2>
+      <div className="modal-panel modal-form-card max-h-[calc(100dvh-2rem)] w-full max-w-xl overflow-y-auto rounded-2xl border border-navy-border bg-navy-surface p-5 shadow-elevated sm:p-6">
+        <div className="mb-5 border-b border-navy-border pb-4">
+          <p className="mb-1 text-xs font-semibold uppercase tracking-[0.16em] text-cyan-accent">Prospecção</p>
+          <h2 className="text-xl font-bold text-text-primary">{lead ? 'Editar Lead' : 'Novo Lead'}</h2>
+          <p className="mt-1 text-sm text-text-secondary">Registre os dados e o potencial deste contato.</p>
+        </div>
         <form onSubmit={handleSubmit} className="space-y-4" noValidate>
-          <div>
-            <label htmlFor="lead-name" className={labelClass}>Nome *</label>
-            <input id="lead-name" className={inputClass} value={name} onChange={e => setName(e.target.value)} />
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div>
+              <label htmlFor="lead-name" className={labelClass}>Nome *</label>
+              <input id="lead-name" className={inputClass} value={name} onChange={e => setName(e.target.value)} />
+            </div>
+            <div>
+              <label htmlFor="lead-email" className={labelClass}>E-mail *</label>
+              <input id="lead-email" type="email" className={inputClass} value={email} onChange={e => setEmail(e.target.value)} />
+            </div>
           </div>
-          <div>
-            <label htmlFor="lead-email" className={labelClass}>E-mail *</label>
-            <input id="lead-email" type="email" className={inputClass} value={email} onChange={e => setEmail(e.target.value)} />
-          </div>
-          <div>
-            <label htmlFor="lead-phone" className={labelClass}>Telefone *</label>
-            <input id="lead-phone" className={inputClass} value={phone} onChange={e => setPhone(e.target.value)} />
-          </div>
-          <div>
-            <label htmlFor="lead-company" className={labelClass}>Empresa</label>
-            <input id="lead-company" className={inputClass} value={company} onChange={e => setCompany(e.target.value)} />
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div>
+              <label htmlFor="lead-phone" className={labelClass}>Telefone *</label>
+              <input id="lead-phone" className={inputClass} value={phone} onChange={e => setPhone(e.target.value)} />
+            </div>
+            <div>
+              <label htmlFor="lead-company" className={labelClass}>Empresa</label>
+              <input id="lead-company" className={inputClass} value={company} onChange={e => setCompany(e.target.value)} />
+            </div>
           </div>
           <div className="grid grid-cols-2 gap-3">
             <div>
@@ -111,13 +120,14 @@ const LeadModal: React.FC<LeadModalProps> = ({ isOpen, onClose, onSave, lead }) 
             <textarea id="lead-notes" rows={3} className={inputClass} value={notes} onChange={e => setNotes(e.target.value)} />
           </div>
           {error && <p role="alert" className="text-sm text-red-400">{error}</p>}
-          <div className="flex justify-end space-x-3">
+          <div className="flex justify-end gap-3 border-t border-navy-border pt-4">
             <button type="button" onClick={onClose} className="btn-secondary">Cancelar</button>
             <button type="submit" className="btn-primary">{lead ? 'Atualizar' : 'Salvar'}</button>
           </div>
         </form>
       </div>
-    </div>
+    </div>,
+    document.body,
   );
 };
 
