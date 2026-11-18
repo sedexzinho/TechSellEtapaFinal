@@ -1,86 +1,105 @@
-import React, { useState, useEffect } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useAuthStore } from '../store/authStore';
 import { LeadRepository } from '../repositories/leadRepository';
+import LeadModal from '../components/ui/LeadModal';
 import type { Lead } from '../schemas/leadSchema';
+
+type Status = Lead['status'];
+
+const COLUMNS: Array<{ id: Status; title: string; badge: string }> = [
+  { id: 'novo', title: 'Novo', badge: 'bg-green-100 text-green-800' },
+  { id: 'contatado', title: 'Contatado', badge: 'bg-blue-100 text-blue-800' },
+  { id: 'convertido', title: 'Convertido', badge: 'bg-purple-100 text-purple-800' },
+  { id: 'perdido', title: 'Perdido', badge: 'bg-red-100 text-red-800' },
+];
+
+const brl = (n: number) => n.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+const fmtDate = (iso: string) => new Date(`${iso}T00:00:00`).toLocaleDateString('pt-BR');
 
 const LeadsPage: React.FC = () => {
   const { user } = useAuthStore();
+  const isAdmin = user?.perfil === 'ADMIN';
+  const repo = useMemo(() => new LeadRepository(), []);
+
   const [leads, setLeads] = useState<Lead[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [draggingLead, setDraggingLead] = useState<Lead | null>(null);
-  const [dragOverColumn, setDragOverColumn] = useState<'novo' | 'contatado' | 'convertido' | 'perdido' | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
+  const [draggingId, setDraggingId] = useState<number | null>(null);
+  const [dragOver, setDragOver] = useState<Status | null>(null);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [editing, setEditing] = useState<Lead | null>(null);
 
-  const leadRepository = new LeadRepository();
-
-  useEffect(() => {
-    loadLeads();
-  }, []);
-
-  const loadLeads = async () => {
+  const load = useCallback(() => {
     try {
-      setIsLoading(true);
-      setError(null);
-      const data = leadRepository.findAll();
-      setLeads(data);
+      setLeads(repo.findAll());
     } catch (err) {
-      setError('Erro ao carregar leads');
       console.error(err);
+      setError('Erro ao carregar leads');
     } finally {
       setIsLoading(false);
     }
+  }, [repo]);
+
+  useEffect(() => {
+    load();
+  }, [load]);
+
+  const notify = (kind: 'error' | 'success', msg: string) => {
+    setError(kind === 'error' ? msg : null);
+    setSuccess(kind === 'success' ? msg : null);
   };
 
-  // Drag and drop handlers
-  const handleDragStart = (lead: Lead) => {
-    setDraggingLead(lead);
+  const convert = (lead: Lead) => {
+    if (!window.confirm(`Converter o lead "${lead.name}" em cliente?`)) return;
+    const result = repo.convertToCustomer(lead.id);
+    if (!result.ok) return notify('error', result.reason);
+    notify(
+      'success',
+      result.alreadyExisted
+        ? `"${lead.name}" convertido. Já havia um cliente com esse e-mail, que foi reaproveitado.`
+        : `"${lead.name}" convertido em cliente. Complete CPF/CNPJ e endereço na tela de Clientes.`,
+    );
+    load();
   };
 
-  const handleDragEnd = () => {
-    setDraggingLead(null);
-    setDragOverColumn(null);
-  };
+  const handleDrop = (target: Status) => {
+    const lead = leads.find(l => l.id === draggingId);
+    setDraggingId(null);
+    setDragOver(null);
+    if (!lead || lead.status === target) return;
 
-  const handleDragOver = (e: React.DragEvent, status: Lead['status']) => {
-    e.preventDefault();
-    setDragOverColumn(status as 'novo' | 'contatado' | 'convertido' | 'perdido');
-  };
-
-  const handleDragLeave = () => {
-    setDragOverColumn(null);
-  };
-
-  const handleDrop = async (status: Lead['status']) => {
-    if (draggingLead && draggingLead.status !== status) {
-      try {
-        const updatedLead = { ...draggingLead, status };
-        leadRepository.update(draggingLead.id, updatedLead);
-        loadLeads();
-        setError(null);
-      } catch (err) {
-        setError('Erro ao atualizar status do lead');
-        console.error(err);
-      }
+    if (lead.status === 'convertido') {
+      return notify('error', 'Lead convertido não pode voltar no funil: o cliente já foi criado.');
     }
-    setDraggingLead(null);
-    setDragOverColumn(null);
+    if (target === 'convertido') return convert(lead);
+
+    repo.moveToStatus(lead.id, target);
+    notify('success', `"${lead.name}" movido para ${COLUMNS.find(c => c.id === target)!.title}.`);
+    load();
   };
 
-  const handleConvertToCustomer = async (lead: Lead) => {
-    if (window.confirm(`Tem certeza que deseja converter o lead "${lead.name}" em cliente?`)) {
-      try {
-        const success = await leadRepository.convertToCustomer(lead.id);
-        if (success) {
-          loadLeads();
-          setError(null);
-        } else {
-          setError('Erro ao converter lead em cliente');
-        }
-      } catch (err) {
-        setError('Erro ao converter lead em cliente');
-        console.error(err);
-      }
+  const handleSave = (data: Omit<Lead, 'id'>) => {
+    try {
+      if (editing) repo.update(editing.id, data);
+      else repo.create(data);
+      setModalOpen(false);
+      setEditing(null);
+      notify('success', editing ? 'Lead atualizado.' : 'Lead criado.');
+      load();
+    } catch (err) {
+      console.error(err);
+      notify('error', 'Erro ao salvar lead');
     }
+  };
+
+  // RN05: apenas o Administrador exclui registros
+  const handleDelete = (lead: Lead) => {
+    if (!isAdmin) return;
+    if (!window.confirm(`Excluir o lead "${lead.name}"? Esta ação não pode ser desfeita.`)) return;
+    repo.delete(lead.id);
+    notify('success', 'Lead excluído.');
+    load();
   };
 
   if (isLoading) {
@@ -91,22 +110,6 @@ const LeadsPage: React.FC = () => {
     );
   }
 
-  if (error) {
-    return (
-      <div className="alert-error">
-        {error}
-      </div>
-    );
-  }
-
-  // Group leads by status for kanban columns
-  const leadsByStatus: Record<Lead['status'], Lead[]> = {
-    novo: leads.filter(lead => lead.status === 'novo'),
-    contatado: leads.filter(lead => lead.status === 'contatado'),
-    convertido: leads.filter(lead => lead.status === 'convertido'),
-    perdido: leads.filter(lead => lead.status === 'perdido')
-  };
-
   return (
     <div className="page-shell">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
@@ -114,232 +117,120 @@ const LeadsPage: React.FC = () => {
           <h1 className="page-title">Prospecção</h1>
           <p className="page-subtitle">Arraste os leads entre as etapas do funil.</p>
         </div>
-        {user?.perfil === 'ADMIN' && (
-          <button
-            onClick={() => alert('Funcionalidade de novo lead será implementada em uma versão futura')}
-            className="btn-primary"
-          >
-            Novo Lead
-          </button>
-        )}
+        <button
+          onClick={() => {
+            setEditing(null);
+            setModalOpen(true);
+          }}
+          className="btn-primary"
+        >
+          Novo Lead
+        </button>
       </div>
+
+      {error && <div role="alert" className="alert-error">{error}</div>}
+      {success && (
+        <div role="status" className="rounded-xl border border-emerald-300 bg-emerald-50 px-4 py-3 text-sm text-emerald-800">
+          {success}
+        </div>
+      )}
 
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-        {/* Novo Column */}
-        <div className="space-y-3">
-          <div
-            className={`min-h-[280px] rounded-2xl border-2 border-dashed p-4 transition-colors duration-200 ${dragOverColumn === 'novo' ? 'border-blue-primary bg-teal-50/50' : 'border-navy-border bg-slate-50'}`}
-            onDragOver={(e) => handleDragOver(e, 'novo')}
-            onDragLeave={handleDragLeave}
-            onDrop={() => handleDrop('novo')}
-          >
-            <h2 className="text-lg font-bold text-text-primary mb-3 flex items-center">
-              Novo
-              <span className="ml-2 text-text-primary/70">{leadsByStatus.novo.length}</span>
-            </h2>
-            <div className="space-y-2 min-h-[200px]">
-              {leadsByStatus.novo.map(lead => (
-                <div
-                  key={lead.id}
-                  className={`cursor-grab rounded-xl border border-navy-border bg-white p-3 shadow-sm transition-transform duration-200 hover:-translate-y-0.5 hover:shadow-md ${draggingLead === lead ? 'opacity-50' : ''}`}
-                  draggable={true}
-                  onDragStart={() => handleDragStart(lead)}
-                  onDragEnd={handleDragEnd}
-                >
-                  <div className="flex justify-between items-start mb-2">
-                    <h3 className="font-medium text-text-primary">{lead.name}</h3>
-                    <span className={`text-xs px-2 py-0.5 rounded-full bg-green-100 text-green-800`}
-                          >Novo</span>
-                  </div>
-                  <p className="text-text-primary/70 text-sm">{lead.email}</p>
-                  <p className="text-text-primary/70 text-sm">{lead.phone}</p>
-                  {lead.company && (
-                    <p className="text-text-primary/60 text-xs mt-1">{lead.company}</p>
-                  )}
-                  <p className="text-text-primary/60 text-xs mt-1">
-                    Valor potencial: R$ {lead.value.toFixed(2)}
-                  </p>
-                  {lead.notes && (
-                    <p className="text-text-primary/60 text-xs mt-1">
-                      {lead.notes.substring(0, 50)}${lead.notes.length > 50 ? '...' : ''}
-                    </p>
-                  )}
-                  <div className="mt-2 flex justify-end space-x-2">
-                    {user?.perfil === 'ADMIN' && (
-                      <button
-                        onClick={() => handleConvertToCustomer(lead)}
-                        className="btn-sm bg-emerald-600 text-white hover:bg-emerald-700"
-                      >
-                        Converter
-                      </button>
+        {COLUMNS.map(col => {
+          const items = leads.filter(l => l.status === col.id);
+          return (
+            <section
+              key={col.id}
+              aria-label={`Coluna ${col.title}`}
+              className={`min-h-[280px] rounded-2xl border-2 border-dashed p-4 transition-colors duration-200 ${
+                dragOver === col.id ? 'border-blue-primary bg-teal-50/50' : 'border-navy-border bg-slate-50'
+              }`}
+              onDragOver={e => {
+                e.preventDefault();
+                setDragOver(col.id);
+              }}
+              onDragLeave={() => setDragOver(null)}
+              onDrop={() => handleDrop(col.id)}
+            >
+              <h2 className="mb-1 flex items-center text-lg font-bold text-text-primary">
+                {col.title}
+                <span className="ml-2 text-text-primary/70">{items.length}</span>
+              </h2>
+              <p className="mb-3 text-xs text-text-primary/60">
+                {brl(items.reduce((sum, l) => sum + l.value, 0))} em potencial
+              </p>
+
+              <div className="min-h-[200px] space-y-2">
+                {items.map(lead => (
+                  <article
+                    key={lead.id}
+                    draggable={lead.status !== 'convertido'}
+                    onDragStart={() => setDraggingId(lead.id)}
+                    onDragEnd={() => {
+                      setDraggingId(null);
+                      setDragOver(null);
+                    }}
+                    className={`rounded-xl border border-navy-border bg-white p-3 shadow-sm transition-transform duration-200 hover:-translate-y-0.5 hover:shadow-md ${
+                      lead.status === 'convertido' ? '' : 'cursor-grab'
+                    } ${draggingId === lead.id ? 'opacity-50' : ''}`}
+                  >
+                    <div className="mb-2 flex items-start justify-between gap-2">
+                      <h3 className="font-medium text-text-primary">{lead.name}</h3>
+                      <span className={`rounded-full px-2 py-0.5 text-xs ${col.badge}`}>{col.title}</span>
+                    </div>
+                    <p className="text-sm text-text-primary/70">{lead.email}</p>
+                    <p className="text-sm text-text-primary/70">{lead.phone}</p>
+                    {lead.company && <p className="mt-1 text-xs text-text-primary/60">{lead.company}</p>}
+                    <p className="mt-1 text-xs text-text-primary/60">Valor potencial: {brl(lead.value)}</p>
+                    {lead.lastContact && (
+                      <p className="mt-1 text-xs text-text-primary/60">Último contato: {fmtDate(lead.lastContact)}</p>
                     )}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        {/* Contatado Column */}
-        <div className="space-y-3">
-          <div
-            className={`min-h-[280px] rounded-2xl border-2 border-dashed p-4 transition-colors duration-200 ${dragOverColumn === 'contatado' ? 'border-blue-primary bg-teal-50/50' : 'border-navy-border bg-slate-50'}`}
-            onDragOver={(e) => handleDragOver(e, 'contatado')}
-            onDragLeave={handleDragLeave}
-            onDrop={() => handleDrop('contatado')}
-          >
-            <h2 className="text-lg font-bold text-text-primary mb-3 flex items-center">
-              Contatado
-              <span className="ml-2 text-text-primary/70">{leadsByStatus.contatado.length}</span>
-            </h2>
-            <div className="space-y-2 min-h-[200px]">
-              {leadsByStatus.contatado.map(lead => (
-                <div
-                  key={lead.id}
-                  className={`cursor-grab rounded-xl border border-navy-border bg-white p-3 shadow-sm transition-transform duration-200 hover:-translate-y-0.5 hover:shadow-md ${draggingLead === lead ? 'opacity-50' : ''}`}
-                  draggable={true}
-                  onDragStart={() => handleDragStart(lead)}
-                  onDragEnd={handleDragEnd}
-                >
-                  <div className="flex justify-between items-start mb-2">
-                    <h3 className="font-medium text-text-primary">{lead.name}</h3>
-                    <span className={`text-xs px-2 py-0.5 rounded-full bg-blue-100 text-blue-800`}
-                          >Contatado</span>
-                  </div>
-                  <p className="text-text-primary/70 text-sm">{lead.email}</p>
-                  <p className="text-text-primary/70 text-sm">{lead.phone}</p>
-                  {lead.company && (
-                    <p className="text-text-primary/60 text-xs mt-1">{lead.company}</p>
-                  )}
-                  <p className="text-text-primary/60 text-xs mt-1">
-                    Valor potencial: R$ {lead.value.toFixed(2)}
-                  </p>
-                  {lead.lastContact && (
-                    <p className="text-text-primary/60 text-xs mt-1">
-                      Último contato: {new Date(lead.lastContact).toLocaleDateString()}
-                    </p>
-                  )}
-                  {lead.notes && (
-                    <p className="text-text-primary/60 text-xs mt-1">
-                      {lead.notes.substring(0, 50)}${lead.notes.length > 50 ? '...' : ''}
-                    </p>
-                  )}
-                  <div className="mt-2 flex justify-end space-x-2">
-                    {user?.perfil === 'ADMIN' && (
-                      <button
-                        onClick={() => handleConvertToCustomer(lead)}
-                        className="btn-sm bg-emerald-600 text-white hover:bg-emerald-700"
-                      >
-                        Converter
-                      </button>
+                    {lead.notes && (
+                      <p className="mt-1 text-xs text-text-primary/60">
+                        {lead.notes.length > 50 ? `${lead.notes.slice(0, 50)}...` : lead.notes}
+                      </p>
                     )}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
 
-        {/* Convertido Column */}
-        <div className="space-y-3">
-          <div
-            className={`min-h-[280px] rounded-2xl border-2 border-dashed p-4 transition-colors duration-200 ${dragOverColumn === 'convertido' ? 'border-blue-primary bg-teal-50/50' : 'border-navy-border bg-slate-50'}`}
-            onDragOver={(e) => handleDragOver(e, 'convertido')}
-            onDragLeave={handleDragLeave}
-            onDrop={() => handleDrop('convertido')}
-          >
-            <h2 className="text-lg font-bold text-text-primary mb-3 flex items-center">
-              Convertido
-              <span className="ml-2 text-text-primary/70">{leadsByStatus.convertido.length}</span>
-            </h2>
-            <div className="space-y-2 min-h-[200px]">
-              {leadsByStatus.convertido.map(lead => (
-                <div
-                  key={lead.id}
-                  className={`cursor-grab rounded-xl border border-navy-border bg-white p-3 shadow-sm transition-transform duration-200 hover:-translate-y-0.5 hover:shadow-md ${draggingLead === lead ? 'opacity-50' : ''}`}
-                  draggable={true}
-                  onDragStart={() => handleDragStart(lead)}
-                  onDragEnd={handleDragEnd}
-                >
-                  <div className="flex justify-between items-start mb-2">
-                    <h3 className="font-medium text-text-primary">{lead.name}</h3>
-                    <span className={`text-xs px-2 py-0.5 rounded-full bg-purple-100 text-purple-800`}
-                          >Convertido</span>
-                  </div>
-                  <p className="text-text-primary/70 text-sm">{lead.email}</p>
-                  <p className="text-text-primary/70 text-sm">{lead.phone}</p>
-                  {lead.company && (
-                    <p className="text-text-primary/60 text-xs mt-1">{lead.company}</p>
-                  )}
-                  <p className="text-text-primary/60 text-xs mt-1">
-                    Valor potencial: R$ {lead.value.toFixed(2)}
-                  </p>
-                  {lead.lastContact && (
-                    <p className="text-text-primary/60 text-xs mt-1">
-                      Último contato: {new Date(lead.lastContact).toLocaleDateString()}
-                    </p>
-                  )}
-                  {lead.notes && (
-                    <p className="text-text-primary/60 text-xs mt-1">
-                      {lead.notes.substring(0, 50)}${lead.notes.length > 50 ? '...' : ''}
-                    </p>
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        {/* Perdido Column */}
-        <div className="space-y-3">
-          <div
-            className={`min-h-[280px] rounded-2xl border-2 border-dashed p-4 transition-colors duration-200 ${dragOverColumn === 'perdido' ? 'border-blue-primary bg-teal-50/50' : 'border-navy-border bg-slate-50'}`}
-            onDragOver={(e) => handleDragOver(e, 'perdido')}
-            onDragLeave={handleDragLeave}
-            onDrop={() => handleDrop('perdido')}
-          >
-            <h2 className="text-lg font-bold text-text-primary mb-3 flex items-center">
-              Perdido
-              <span className="ml-2 text-text-primary/70">{leadsByStatus.perdido.length}</span>
-            </h2>
-            <div className="space-y-2 min-h-[200px]">
-              {leadsByStatus.perdido.map(lead => (
-                <div
-                  key={lead.id}
-                  className={`cursor-grab rounded-xl border border-navy-border bg-white p-3 shadow-sm transition-transform duration-200 hover:-translate-y-0.5 hover:shadow-md ${draggingLead === lead ? 'opacity-50' : ''}`}
-                  draggable={true}
-                  onDragStart={() => handleDragStart(lead)}
-                  onDragEnd={handleDragEnd}
-                >
-                  <div className="flex justify-between items-start mb-2">
-                    <h3 className="font-medium text-text-primary">{lead.name}</h3>
-                    <span className={`text-xs px-2 py-0.5 rounded-full bg-red-100 text-red-800`}
-                          >Perdido</span>
-                  </div>
-                  <p className="text-text-primary/70 text-sm">{lead.email}</p>
-                  <p className="text-text-primary/70 text-sm">{lead.phone}</p>
-                  {lead.company && (
-                    <p className="text-text-primary/60 text-xs mt-1">{lead.company}</p>
-                  )}
-                  <p className="text-text-primary/60 text-xs mt-1">
-                    Valor potencial: R$ {lead.value.toFixed(2)}
-                  </p>
-                  {lead.lastContact && (
-                    <p className="text-text-primary/60 text-xs mt-1">
-                      Último contato: {new Date(lead.lastContact).toLocaleDateString()}
-                    </p>
-                  )}
-                  {lead.notes && (
-                    <p className="text-text-primary/60 text-xs mt-1">
-                      {lead.notes.substring(0, 50)}${lead.notes.length > 50 ? '...' : ''}
-                    </p>
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
+                    <div className="mt-2 flex flex-wrap justify-end gap-2">
+                      {lead.status !== 'convertido' && (
+                        <button
+                          onClick={() => {
+                            setEditing(lead);
+                            setModalOpen(true);
+                          }}
+                          className="btn-sm"
+                        >
+                          Editar
+                        </button>
+                      )}
+                      {lead.status !== 'convertido' && lead.status !== 'perdido' && (
+                        <button onClick={() => convert(lead)} className="btn-sm bg-emerald-600 text-white hover:bg-emerald-700">
+                          Converter em cliente
+                        </button>
+                      )}
+                      {isAdmin && (
+                        <button onClick={() => handleDelete(lead)} className="btn-sm bg-red-600 text-white hover:bg-red-700">
+                          Excluir
+                        </button>
+                      )}
+                    </div>
+                  </article>
+                ))}
+              </div>
+            </section>
+          );
+        })}
       </div>
+
+      <LeadModal
+        isOpen={modalOpen}
+        onClose={() => {
+          setModalOpen(false);
+          setEditing(null);
+        }}
+        onSave={handleSave}
+        lead={editing}
+      />
     </div>
   );
 };

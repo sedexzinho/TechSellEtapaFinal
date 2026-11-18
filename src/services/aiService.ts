@@ -61,6 +61,7 @@ export interface GenerateSummaryOptions {
 
 const API_BASE = 'https://generativelanguage.googleapis.com/v1beta/models';
 export const DEFAULT_MODEL = 'gemini-3.5-flash';
+const FALLBACK_MODEL = 'gemini-flash-latest';
 const TIMEOUT_MS = 30_000;
 const DAY_MS = 86_400_000;
 
@@ -363,9 +364,29 @@ export async function generateSummary(
     return { text: buildTemplateSummary(snapshot), source: 'template' };
   }
 
+  const fetchFn = options.fetchFn ?? fetch;
+  // Se o modelo estiver sobrecarregado (503) ou no limite (429), tenta de novo e depois com um modelo reserva.
+  const attempts: Array<{ model: string; delayMs: number }> = [
+    { model, delayMs: 0 },
+    { model, delayMs: 2000 },
+    ...(model !== FALLBACK_MODEL ? [{ model: FALLBACK_MODEL, delayMs: 1000 }] : []),
+  ];
+
   try {
-    const text = await callGemini(snapshot, apiKey, model, options.fetchFn ?? fetch);
-    return { text, source: 'ia', model };
+    let lastError: unknown;
+    for (const attempt of attempts) {
+      if (attempt.delayMs) await new Promise((resolve) => setTimeout(resolve, attempt.delayMs));
+      try {
+        const text = await callGemini(snapshot, apiKey, attempt.model, fetchFn);
+        return { text, source: 'ia', model: attempt.model };
+      } catch (error) {
+        lastError = error;
+        const message = error instanceof Error ? error.message : '';
+        const temporary = /HTTP (503|429|500|502|504)/.test(message);
+        if (!temporary) throw error;
+      }
+    }
+    throw lastError;
   } catch (error) {
     return {
       text: buildTemplateSummary(snapshot),
