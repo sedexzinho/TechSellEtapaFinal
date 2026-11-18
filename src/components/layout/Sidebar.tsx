@@ -12,7 +12,6 @@ import {
   Activity,
   ChevronsLeft,
   ChevronsRight,
-  Gem,
 } from 'lucide-react';
 import { useAuthStore } from '../../store/authStore';
 import { cn } from '../ui/utils';
@@ -90,15 +89,8 @@ const Sidebar = ({ isMobile, collapsed, onToggleCollapse, onNavigate }: SidebarP
       )}
     >
       <div className={cn('flex h-16 items-center border-b border-white/5', collapsed ? 'justify-center px-2' : 'px-4')}>
-        <div className="icon-lift flex h-9 w-9 items-center justify-center rounded-xl bg-teal-500/15 text-teal-300">
-          <Gem className="h-4 w-4" />
-        </div>
-        {!collapsed && (
-          <div className="ml-3 min-w-0">
-            <p className="truncate text-sm font-semibold tracking-tight">TechSell</p>
-            <p className="truncate text-[14px] text-sidebar-muted">VK marmore gestão</p>
-          </div>
-        )}
+        <div className="icon-lift flex h-99 w-99 items-center justify-center rounded-xl bg-white/90 p-1.5"> <img src="/logo-vk.png" alt="VK Mármores" className="h-full w-full object-contain" /> </div>
+        
       </div>
 
       <div className="flex-1 overflow-y-auto px-3 py-5">

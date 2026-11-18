@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import type { Product } from '../../schemas/productSchema';
 
 interface ProductModalProps {
@@ -20,6 +20,23 @@ const [formData, setFormData] = useState<Product>({
     categoria: initialData?.categoria || '',
     ativo: initialData?.ativo ?? true
   });
+
+  // Preenche o formulário com os dados do produto sempre que o modal abrir
+  useEffect(() => {
+    if (!isOpen) return;
+    setFormData({
+      id: initialData?.id ?? 0,
+      nome: initialData?.nome ?? '',
+      descricao: initialData?.descricao ?? '',
+      preco: initialData?.preco ?? 0,
+      estoque: initialData?.estoque ?? 0,
+      estoqueMinimo: initialData?.estoqueMinimo ?? 0,
+      codigoBarras: initialData?.codigoBarras ?? '',
+      categoria: initialData?.categoria ?? '',
+      ativo: initialData?.ativo ?? true
+    });
+    setError(null);
+  }, [isOpen, initialData]);
 
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);

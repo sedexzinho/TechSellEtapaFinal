@@ -200,7 +200,7 @@ const MetasPage: FC = () => {
               onChange={(e) => setSelectedYear(parseInt(e.target.value))}
               className="bg-navy-border rounded px-3 py-2 text-text-primary focus:outline-none focus:ring-2 focus:ring-blue-primary"
             >
-              {[2024, 2025, 2026].map(year => (
+              {[2024, 2025, 2026, 2027].map(year => (
                 <option key={year} value={year}>
                   {year}
                 </option>
@@ -239,7 +239,20 @@ const MetasPage: FC = () => {
             
             {/* Tabela de desempenho por vendedor */}
             <div className="surface-card overflow-hidden p-0">
-              <h3 className="section-title border-b border-navy-border px-5 py-4">Desempenho por Vendedor</h3>
+              <div className="flex items-center justify-between border-b border-navy-border px-5 py-4">
+                <h3 className="section-title">Desempenho por Vendedor</h3>
+                <button
+                  onClick={() => {
+                    setEditGoal(null);
+                    setGoalVendor(null);
+                    setGoalFormError(null);
+                    setShowAddGoalModal(true);
+                  }}
+                  className="btn-primary"
+                >
+                  Nova Meta
+                </button>
+              </div>
               <div className="overflow-x-auto">
                 <table className="data-table">
                   <thead>
@@ -253,16 +266,16 @@ const MetasPage: FC = () => {
                   </thead>
                   <tbody>
                     {users
-                      .filter(user => user.perfil === 'VENDEDOR' && user.ativo)
-                      .map(user => {
-                        const userGoal = goals.find(g => g.userId === user.id);
+                      .filter(vendor => vendor.perfil === 'VENDEDOR' && vendor.ativo)
+                      .map(vendor => {
+                        const userGoal = goals.find(g => g.userId === vendor.id);
                         const target = userGoal ? userGoal.targetValue : 0;
                         const achieved = userGoal ? userGoal.achievedValue : 0;
                         const performance = target === 0 ? 0 : (achieved / target) * 100;
                         
                         return (
-                          <tr key={user.id}>
-                            <td className="px-4 py-3 text-text-primary font-medium">{user.nome}</td>
+                          <tr key={vendor.id}>
+                            <td className="px-4 py-3 text-text-primary font-medium">{vendor.nome}</td>
                             <td className="px-4 py-3 text-text-primary">R$ {target.toLocaleString('pt-BR', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}</td>
                              <td className={`px-4 py-3 text-text-primary ${achieved >= 0 ? 'text-green-600' : 'text-red-600'}`}>R$ {achieved.toLocaleString('pt-BR', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}</td>
                             <td className="px-4 py-3 text-text-primary">
@@ -278,17 +291,19 @@ const MetasPage: FC = () => {
                               {user?.perfil === 'ADMIN' && (
                                 <>
                                   <button
-                                    onClick={() => openGoalModal(user, userGoal ?? null)}
+                                    onClick={() => openGoalModal(vendor, userGoal ?? null)}
                                     className="btn-sm btn-outline"
                                   >
-                                    Editar
+                                    {userGoal ? 'Editar' : 'Definir meta'}
                                   </button>
-                                  <button
-                                    onClick={() => userGoal && handleDeleteGoal(userGoal.id)}
-                                    className="btn-sm border border-red-200 text-red-700 hover:bg-red-50"
-                                  >
-                                    Excluir
-                                  </button>
+                                  {userGoal && (
+                                    <button
+                                      onClick={() => handleDeleteGoal(userGoal.id)}
+                                      className="btn-sm border border-red-200 text-red-700 hover:bg-red-50"
+                                    >
+                                      Excluir
+                                    </button>
+                                  )}
                                 </>
                               )}
                             </td>
@@ -539,7 +554,7 @@ const MetasPage: FC = () => {
                       defaultValue={selectedYear.toString()}
                       className="w-full bg-navy-border rounded px-3 py-2 text-text-primary focus:outline-none focus:ring-2 focus:ring-blue-primary"
                     >
-                      {[2024, 2025, 2026].map(year => (
+                      {[2024, 2025, 2026, 2027].map(year => (
                         <option key={year} value={year}>
                           {year}
                         </option>
