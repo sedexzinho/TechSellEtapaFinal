@@ -32,7 +32,7 @@ const LoginPage = () => {
         <div className="login-copy hidden lg:block">
           <div className="mb-5 flex h-[116px] w-[220px] items-center justify-center overflow-hidden rounded-xl bg-white p-2">
             <img
-              src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-XhgEoUrI2fbb4IIGG8SR0Ahwlmgvmm.png"
+              src="/logo-vk.png"
               alt="VK Mármores — Soluções que constroem"
               className="h-full w-full object-contain"
             />
@@ -50,7 +50,7 @@ const LoginPage = () => {
           <div className="mb-8 text-center">
             <div className="mx-auto mb-4 flex h-[60px] w-[112px] items-center justify-center overflow-hidden rounded-lg bg-white p-1 lg:hidden">
               <img
-                src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-XhgEoUrI2fbb4IIGG8SR0Ahwlmgvmm.png"
+                src="/logo-vk.png"
                 alt="VK Mármores — Soluções que constroem"
                 className="h-full w-full object-contain"
               />
