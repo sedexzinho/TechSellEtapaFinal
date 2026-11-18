@@ -6,11 +6,11 @@ import type { Lead } from '../schemas/leadSchema';
 
 type Status = Lead['status'];
 
-const COLUMNS: Array<{ id: Status; title: string; badge: string }> = [
-  { id: 'novo', title: 'Novo', badge: 'bg-green-100 text-green-800' },
-  { id: 'contatado', title: 'Contatado', badge: 'bg-blue-100 text-blue-800' },
-  { id: 'convertido', title: 'Convertido', badge: 'bg-purple-100 text-purple-800' },
-  { id: 'perdido', title: 'Perdido', badge: 'bg-red-100 text-red-800' },
+const COLUMNS: Array<{ id: Status; title: string; badge: string; accent: string }> = [
+  { id: 'novo', title: 'Novo', badge: 'border-emerald-400/20 bg-emerald-400/10 text-emerald-300', accent: 'bg-emerald-400' },
+  { id: 'contatado', title: 'Contatado', badge: 'border-blue-400/20 bg-blue-400/10 text-blue-300', accent: 'bg-blue-400' },
+  { id: 'convertido', title: 'Convertido', badge: 'border-violet-400/20 bg-violet-400/10 text-violet-300', accent: 'bg-violet-400' },
+  { id: 'perdido', title: 'Perdido', badge: 'border-rose-400/20 bg-rose-400/10 text-rose-300', accent: 'bg-rose-400' },
 ];
 
 const brl = (n: number) => n.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
@@ -130,20 +130,20 @@ const LeadsPage: React.FC = () => {
 
       {error && <div role="alert" className="alert-error">{error}</div>}
       {success && (
-        <div role="status" className="rounded-xl border border-emerald-300 bg-emerald-50 px-4 py-3 text-sm text-emerald-800">
+        <div role="status" className="rounded-xl border border-emerald-400/20 bg-emerald-400/10 px-4 py-3 text-sm text-emerald-200">
           {success}
         </div>
       )}
 
-      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+      <div className="grid grid-cols-[repeat(4,minmax(260px,1fr))] gap-4 overflow-x-auto pb-2">
         {COLUMNS.map(col => {
           const items = leads.filter(l => l.status === col.id);
           return (
             <section
               key={col.id}
               aria-label={`Coluna ${col.title}`}
-              className={`min-h-[280px] rounded-2xl border-2 border-dashed p-4 transition-colors duration-200 ${
-                dragOver === col.id ? 'border-blue-primary bg-teal-50/50' : 'border-navy-border bg-slate-50'
+              className={`min-h-[280px] rounded-2xl border p-4 transition-colors duration-200 ${
+                dragOver === col.id ? 'border-blue-primary bg-blue-primary/10' : 'border-navy-border bg-navy-surface/70'
               }`}
               onDragOver={e => {
                 e.preventDefault();
@@ -153,8 +153,9 @@ const LeadsPage: React.FC = () => {
               onDrop={() => handleDrop(col.id)}
             >
               <h2 className="mb-1 flex items-center text-lg font-bold text-text-primary">
+                <span className={`mr-2 size-2 rounded-full ${col.accent}`} aria-hidden="true" />
                 {col.title}
-                <span className="ml-2 text-text-primary/70">{items.length}</span>
+                <span className="ml-2 rounded-full bg-navy-card px-2 py-0.5 text-xs font-semibold text-text-secondary">{items.length}</span>
               </h2>
               <p className="mb-3 text-xs text-text-primary/60">
                 {brl(items.reduce((sum, l) => sum + l.value, 0))} em potencial
@@ -170,13 +171,13 @@ const LeadsPage: React.FC = () => {
                       setDraggingId(null);
                       setDragOver(null);
                     }}
-                    className={`rounded-xl border border-navy-border bg-white p-3 shadow-sm transition-transform duration-200 hover:-translate-y-0.5 hover:shadow-md ${
+                    className={`rounded-xl border border-navy-border bg-navy-card p-3 shadow-card transition-all duration-200 hover:-translate-y-0.5 hover:border-blue-primary/50 hover:shadow-elevated ${
                       lead.status === 'convertido' ? '' : 'cursor-grab'
                     } ${draggingId === lead.id ? 'opacity-50' : ''}`}
                   >
                     <div className="mb-2 flex items-start justify-between gap-2">
                       <h3 className="font-medium text-text-primary">{lead.name}</h3>
-                      <span className={`rounded-full px-2 py-0.5 text-xs ${col.badge}`}>{col.title}</span>
+                      <span className={`rounded-full border px-2 py-0.5 text-xs font-medium ${col.badge}`}>{col.title}</span>
                     </div>
                     <p className="text-sm text-text-primary/70">{lead.email}</p>
                     <p className="text-sm text-text-primary/70">{lead.phone}</p>
@@ -198,7 +199,7 @@ const LeadsPage: React.FC = () => {
                             setEditing(lead);
                             setModalOpen(true);
                           }}
-                          className="btn-sm"
+                          className="btn-sm border border-navy-border bg-navy-surface px-3 py-1.5 text-text-secondary hover:border-blue-primary/50 hover:text-text-primary"
                         >
                           Editar
                         </button>
